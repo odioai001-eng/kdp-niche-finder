@@ -1,0 +1,1033 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KDP NicheFinder — 需給ギャップ分析ダッシュボード</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--border:#30363d;
+  --text:#c9d1d9;--text2:#8b949e;--blue:#58a6ff;--accent:#f78166;
+  --green:#3fb950;--yellow:#d29922;--purple:#bc8cff;--red:#f85149;
+  --navy:#1e3a5f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Meiryo,sans-serif;font-size:14px;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ヘッダー */
+.header{background:linear-gradient(135deg,#1e3a5f,#0d1117);border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:0;z-index:100}
+.header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:16px;height:56px}
+.logo{font-size:18px;font-weight:700;color:var(--blue);white-space:nowrap}
+.logo span{color:var(--accent)}
+.nav{display:flex;gap:4px;overflow-x:auto;flex:1}
+.nav-btn{background:none;border:none;color:var(--text2);padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;font-size:13px;transition:all .2s}
+.nav-btn:hover{background:var(--bg3);color:var(--text)}
+.nav-btn.active{background:var(--blue);color:#fff;font-weight:600}
+.last-updated{color:var(--text2);font-size:11px;white-space:nowrap}
+
+/* ティッカー */
+.ticker{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 0;overflow:hidden}
+.ticker-inner{display:flex;gap:40px;animation:ticker 40s linear infinite;width:max-content}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{white-space:nowrap;font-size:12px;color:var(--text2)}
+.ticker-item .hot{color:var(--accent)}
+.ticker-item .up{color:var(--green)}
+
+/* メイン */
+.main{max-width:1400px;margin:0 auto;padding:20px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* KPIカード */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.kpi-label{font-size:11px;color:var(--text2);margin-bottom:6px}
+.kpi-value{font-size:22px;font-weight:700;color:var(--blue)}
+.kpi-sub{font-size:11px;color:var(--text2);margin-top:4px}
+
+/* フィルター */
+.filter-bar{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filter-bar select,.filter-bar input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px}
+.tag-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:12px;transition:all .2s}
+.tag-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* テーブル */
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th{background:var(--bg2);color:var(--text2);font-size:12px;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--blue)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(88,166,255,.04)}
+
+/* バッジ */
+.badge{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;width:32px;height:32px;font-weight:700;font-size:12px}
+.badge-S{background:#f78166;color:#fff}
+.badge-A{background:#d29922;color:#fff}
+.badge-B{background:#3fb950;color:#fff}
+.badge-C{background:#8b949e;color:#fff}
+.tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;margin:1px}
+.tag-hot{background:#f7816620;color:var(--accent)}
+.tag-new{background:#3fb95020;color:var(--green)}
+.tag-global{background:#58a6ff20;color:var(--blue)}
+.tag-season{background:#d2992220;color:var(--yellow)}
+.bsr-green{color:var(--green);font-weight:600}
+.bsr-yellow{color:var(--yellow)}
+.bsr-gray{color:var(--text2)}
+.books-green{color:var(--green);font-weight:600}
+.books-yellow{color:var(--yellow)}
+.books-red{color:var(--red)}
+.ku-badge{background:#8b5cf620;color:var(--purple);font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.chance-high{color:var(--green);font-weight:700}
+.chance-mid{color:var(--yellow);font-weight:600}
+
+/* グラフグリッド */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.chart-grid-4{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.chart-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.chart-box h3{font-size:13px;color:var(--text2);margin-bottom:12px}
+.chart-box canvas{max-height:220px}
+
+/* カード（海外） */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.card-flag{font-size:20px}
+.card-title{font-weight:600;font-size:15px;margin:4px 0 2px}
+.card-cat{font-size:11px;color:var(--text2)}
+.card-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.card-metric{background:var(--bg3);border-radius:6px;padding:8px;text-align:center}
+.card-metric-label{font-size:10px;color:var(--text2)}
+.card-metric-value{font-size:16px;font-weight:700;color:var(--blue);margin-top:2px}
+
+/* 書籍生成 */
+.gen-form{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:20px}
+.gen-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px}
+.gen-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.gen-input,.gen-select,.gen-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-size:13px}
+.gen-textarea{height:70px;resize:vertical}
+.gen-btn{background:var(--blue);color:#fff;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;width:100%;margin-top:8px}
+.gen-btn:hover{opacity:.85}
+.gen-result{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px}
+.result-section{margin-bottom:16px}
+.result-section h3{font-size:13px;color:var(--text2);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px}
+.title-option{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-bottom:6px;cursor:pointer;transition:all .2s;font-size:13px}
+.title-option:hover,.title-option.selected{border-color:var(--blue);background:#58a6ff10}
+.toc-item{padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;gap:8px}
+.diff-item{padding:5px 0;font-size:13px;display:flex;align-items:center;gap:6px;color:var(--green)}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.sim-card{background:var(--bg3);border-radius:6px;padding:10px;text-align:center}
+.sim-label{font-size:11px;color:var(--text2)}
+.sim-val{font-size:18px;font-weight:700;color:var(--blue);margin-top:4px}
+.palette-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.palette{width:50px;height:50px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.palette:hover,.palette.active{border-color:var(--blue);transform:scale(1.1)}
+
+/* SEOパネル */
+.seo-panel{background:var(--bg3);border:1px solid #8b5cf640;border-radius:8px;padding:14px;margin-bottom:12px}
+.seo-panel h4{font-size:12px;color:var(--purple);margin-bottom:8px;font-weight:600}
+.seo-kw-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.seo-kw{background:#8b5cf620;color:var(--purple);border-radius:4px;padding:3px 8px;font-size:11px}
+.seo-kw span{color:var(--text2);margin-left:4px}
+.ku-rec{font-size:12px;padding:6px 10px;border-radius:4px;margin-bottom:6px}
+.ku-rec.yes{background:#3fb95020;color:var(--green)}
+.ku-rec.no{background:#f8514920;color:var(--red)}
+
+/* 競合 */
+.comp-kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.comp-kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center}
+.comp-kpi-label{font-size:10px;color:var(--text2)}
+.comp-kpi-value{font-size:18px;font-weight:700;color:var(--blue);margin-top:4px}
+.sent-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;width:80px}
+.sent-pos{background:var(--green)}
+.sent-neg{background:var(--red)}
+.missing-tag{display:inline-block;font-size:10px;background:#f7816620;color:var(--accent);padding:1px 5px;border-radius:3px;margin:1px}
+
+/* レスポンシブ */
+@media(max-width:768px){
+  .chart-grid,.chart-grid-4{grid-template-columns:1fr}
+  .gen-row{grid-template-columns:1fr}
+  .comp-kpi{grid-template-columns:repeat(3,1fr)}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .sim-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">KDP <span>Niche</span>Finder</div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="showPanel('ranking')">📊 需給ランキング</button>
+      <button class="nav-btn" onclick="showPanel('search')">🔎 Kindle JP検索分析</button>
+      <button class="nav-btn" onclick="showPanel('global')">🌍 海外ニッチ比較</button>
+      <button class="nav-btn" onclick="showPanel('ideas')">✍️ 書籍アイデア生成</button>
+      <button class="nav-btn" onclick="showPanel('comp')">🔍 競合分析</button>
+    </nav>
+    <div class="last-updated" id="last-updated-txt"></div>
+  </div>
+</div>
+
+<!-- ティッカー -->
+<div class="ticker">
+  <div class="ticker-inner" id="ticker-inner"></div>
+</div>
+
+<div class="main">
+
+<!-- ========== タブ①：需給ランキング ========== -->
+<div id="panel-ranking" class="panel active">
+  <div class="kpi-grid" id="kpi-cards"></div>
+  <div class="filter-bar">
+    <select id="cat-filter" onchange="renderRanking()">
+      <option value="">全カテゴリ</option>
+      <option value="health">健康</option>
+      <option value="money">マネー</option>
+      <option value="life">ライフ</option>
+      <option value="tech">テック</option>
+      <option value="hobby">趣味</option>
+      <option value="biz">ビジネス</option>
+      <option value="child">育児</option>
+    </select>
+    <select id="score-filter" onchange="renderRanking()">
+      <option value="">全スコア</option>
+      <option value="S">Sランク（9以上）</option>
+      <option value="A">Aランク（7〜9）</option>
+      <option value="B">Bランク（5〜7）</option>
+    </select>
+    <input id="text-filter" placeholder="🔍 ニッチ名で検索..." oninput="renderRanking()" style="width:180px">
+    <button class="tag-btn active" id="tag-global" onclick="toggleTag('global')">🌍 海外ギャップのみ</button>
+    <button class="tag-btn" id="tag-hot" onclick="toggleTag('hot')">🔥 急上昇</button>
+    <button class="tag-btn" id="tag-new" onclick="toggleTag('new')">🆕 今週追加</button>
+    <select id="sort-select" onchange="renderRanking()">
+      <option value="gap">需給ギャップ順</option>
+      <option value="demand">需要スコア順</option>
+      <option value="revenue">推定月収順</option>
+      <option value="books">競合数少ない順</option>
+    </select>
+  </div>
+  <div class="table-wrap">
+    <table id="ranking-table">
+      <thead>
+        <tr>
+          <th>#</th><th>ニッチジャンル</th><th>カテゴリ</th>
+          <th>需給ギャップ</th><th>需要</th><th>供給</th>
+          <th>JP競合数</th><th>EN競合数</th><th>平均BSR</th>
+          <th>推定月収</th><th>トレンド</th>
+        </tr>
+      </thead>
+      <tbody id="ranking-tbody"></tbody>
+    </table>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-box"><h3>カテゴリ別需給ギャップ分布</h3><canvas id="chart-cat"></canvas></div>
+    <div class="chart-box"><h3>推定月収 vs 競合書籍数</h3><canvas id="chart-scatter"></canvas></div>
+    <div class="chart-box"><h3>上位5ニッチ 30日トレンド</h3><canvas id="chart-trend"></canvas></div>
+    <div class="chart-box"><h3>カテゴリ別Sランク件数</h3><canvas id="chart-donut"></canvas></div>
+  </div>
+</div>
+
+<!-- ========== タブ②：Kindle JP 検索分析 ========== -->
+<div id="panel-search" class="panel">
+  <h2 style="margin-bottom:12px;color:var(--blue)">🔎 Kindle JP 検索分析 — 穴場キーワードランキング</h2>
+  <p style="color:var(--text2);font-size:13px;margin-bottom:16px">
+    日本Kindleで実際に検索されているキーワードを月間検索ボリューム順にランキング。<br>
+    「検索数が多いのに競合が少ない穴場ニッチ」を穴場スコアで数値化します。
+  </p>
+  <div class="filter-bar">
+    <select id="search-cat-filter" onchange="renderSearchTable()">
+      <option value="">全カテゴリ</option>
+      <option value="health">健康</option>
+      <option value="money">マネー</option>
+      <option value="life">ライフ</option>
+      <option value="tech">テック</option>
+    </select>
+    <select id="search-sort" onchange="renderSearchTable()">
+      <option value="vol">月間検索数順</option>
+      <option value="chance">穴場スコア順</option>
+      <option value="books">競合数少ない順</option>
+      <option value="revenue">平均月収順</option>
+    </select>
+    <input id="search-text" placeholder="🔍 キーワード検索..." oninput="renderSearchTable()" style="width:180px">
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>キーワード</th><th>カテゴリ</th>
+          <th>月間検索数</th><th>トレンド</th>
+          <th>競合書籍数</th><th>平均BSR</th><th>平均月収</th>
+          <th>穴場スコア</th><th>シリーズ展開</th>
+        </tr>
+      </thead>
+      <tbody id="search-tbody"></tbody>
+    </table>
+  </div>
+  <div class="chart-grid-4">
+    <div class="chart-box"><h3>穴場スコア上位10キーワード</h3><canvas id="chart-search-chance"></canvas></div>
+    <div class="chart-box"><h3>検索数 vs 競合数（バブル）</h3><canvas id="chart-search-bubble"></canvas></div>
+    <div class="chart-box"><h3>月間検索数トップ10</h3><canvas id="chart-search-vol"></canvas></div>
+    <div class="chart-box"><h3>カテゴリ別平均穴場スコア</h3><canvas id="chart-search-cat"></canvas></div>
+  </div>
+</div>
+
+<!-- ========== タブ③：海外ニッチ比較 ========== -->
+<div id="panel-global" class="panel">
+  <h2 style="margin-bottom:12px;color:var(--blue)">🌍 海外ニッチ比較 — 日本未参入ジャンル</h2>
+  <p style="color:var(--text2);font-size:13px;margin-bottom:16px">
+    英語・韓国語・中国語マーケットで売れているのに日本語版がほぼ存在しないニッチジャンルを一覧表示。
+  </p>
+  <div class="card-grid" id="global-cards"></div>
+  <div class="chart-grid" style="margin-top:20px">
+    <div class="chart-box"><h3>マーケット別 未参入ニッチ数</h3><canvas id="chart-global-count"></canvas></div>
+    <div class="chart-box"><h3>海外推定月収 比較（上位5ニッチ）</h3><canvas id="chart-global-rev"></canvas></div>
+  </div>
+</div>
+
+<!-- ========== タブ④：書籍アイデア生成 ========== -->
+<div id="panel-ideas" class="panel">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div>
+      <div class="gen-form">
+        <h3 style="margin-bottom:14px;color:var(--blue)">✍️ 書籍アイデア生成</h3>
+        <div class="gen-label">ニッチジャンル（JP検索分析から選択または直接入力）</div>
+        <select style="width:100%;margin-bottom:6px" class="gen-select" onchange="document.getElementById('gen-niche').value=this.value;updateJpSeo()">
+          <option value="">── Kindle JP 検索ボリューム上位 ──</option>
+          <option value="更年期 対策">更年期 対策（月74,200検索 / 競合6冊）</option>
+          <option value="子なし 老後 お金">子なし 老後 お金（月21,300検索 / 競合7冊）</option>
+          <option value="睡眠 認知症 予防">睡眠 認知症 予防（月16,200検索 / 競合6冊）</option>
+          <option value="副業 AI 自動化">副業 AI 自動化（月15,100検索 / 競合8冊）</option>
+          <option value="ペット 看取り">ペット 看取り（月9,800検索 / 競合5冊）</option>
+          <option value="介護 AI">介護 AI（月8,900検索 / 競合3冊）</option>
+          <option value="腸活 更年期">腸活 更年期（月7,600検索 / 競合4冊）</option>
+          <option value="50代 FIRE">50代 FIRE（月6,800検索 / 競合5冊）</option>
+          <option value="発達障害 仕事">発達障害 仕事（月5,900検索 / 競合4冊）</option>
+          <option value="犬 ホリスティック">犬 ホリスティック（月4,200検索 / 競合6冊）</option>
+        </select>
+        <input id="gen-niche" class="gen-input" placeholder="例: 介護×AI活用" oninput="updateJpSeo()" style="margin-bottom:10px">
+        <div id="jp-seo-panel"></div>
+        <div class="gen-row">
+          <div>
+            <div class="gen-label">KU（Kindle Unlimited）登録</div>
+            <select class="gen-select" id="gen-ku">
+              <option value="auto">自動判定（推奨）</option>
+              <option value="yes">KU登録する</option>
+              <option value="no">KU登録しない</option>
+            </select>
+          </div>
+          <div>
+            <div class="gen-label">価格帯</div>
+            <select class="gen-select" id="gen-price">
+              <option value="298">¥298</option>
+              <option value="498" selected>¥498</option>
+              <option value="698">¥698</option>
+              <option value="798">¥798</option>
+              <option value="980">¥980</option>
+            </select>
+          </div>
+        </div>
+        <div class="gen-row">
+          <div>
+            <div class="gen-label">ターゲット読者</div>
+            <input class="gen-input" id="gen-target" placeholder="例: 50代介護中の家族">
+          </div>
+          <div>
+            <div class="gen-label">目標ページ数</div>
+            <select class="gen-select" id="gen-pages">
+              <option value="80">80ページ程度</option>
+              <option value="120" selected>120ページ程度</option>
+              <option value="160">160ページ程度</option>
+              <option value="200">200ページ程度</option>
+            </select>
+          </div>
+        </div>
+        <button class="gen-btn" onclick="generateIdeas()">アイデア生成 &amp; 競合分析 →</button>
+      </div>
+    </div>
+    <div class="gen-result" id="gen-result">
+      <div style="color:var(--text2);text-align:center;padding:40px 0">
+        左のフォームに入力して「アイデア生成」ボタンを押してください
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== タブ⑤：競合分析 ========== -->
+<div id="panel-comp" class="panel">
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+    <h2 style="color:var(--blue)">🔍 競合分析</h2>
+    <select id="comp-niche" onchange="renderCompetitor()" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px">
+      <optgroup label="── ★超穴場（実データ）──">
+        <option value="0">★ 発達障害×AI（21冊 超穴場）</option>
+        <option value="1">★ ペット看取り（34冊 穴場）</option>
+        <option value="2">50代FIRE（191冊）</option>
+        <option value="3">発達障害×仕事術（89冊）</option>
+        <option value="4">睡眠 本（BSR226の強敵あり）</option>
+      </optgroup>
+      <optgroup label="── Amazon実調査データ ──">
+        <option value="5">更年期 対策（244冊 激戦区）</option>
+        <option value="6">老後 一人（206冊）</option>
+        <option value="7">腸活（454冊 激戦区）</option>
+        <option value="8">投資 初心者（BSR534の強敵あり）</option>
+        <option value="9">副業×AI自動化</option>
+      </optgroup>
+    </select>
+  </div>
+  <div class="comp-kpi" id="comp-kpi"></div>
+  <div class="table-wrap" style="margin-bottom:20px">
+    <table id="comp-table">
+      <thead>
+        <tr>
+          <th>#</th><th>タイトル</th><th>価格</th><th>BSR</th>
+          <th>★評価</th><th>レビュー数</th><th>推定月収</th><th>ページ数</th>
+          <th>出版日</th><th>KU対応</th><th>JP流入KW</th>
+          <th>レビュー感情</th><th>不足コンテンツ</th>
+        </tr>
+      </thead>
+      <tbody id="comp-tbody"></tbody>
+    </table>
+  </div>
+  <div class="chart-grid-4">
+    <div class="chart-box"><h3>レビュー数 × BSR（バブル=推定月収）</h3><canvas id="chart-comp-bubble"></canvas></div>
+    <div class="chart-box"><h3>ページ数 × 価格</h3><canvas id="chart-comp-scatter"></canvas></div>
+    <div class="chart-box"><h3>レビュー感情分析</h3><canvas id="chart-comp-sentiment"></canvas></div>
+    <div class="chart-box"><h3>JP流入キーワード 検索ボリューム</h3><canvas id="chart-comp-kw"></canvas></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// =======================================
+// データ
+// =======================================
+const lastUpdated = '2026年06月27日 更新（スマホ脳・自律神経追加）';
+
+const NICHES = [
+  // 実データ基準（2026年6月 Amazon Kindleストア調査）
+  {id:1,name:"発達障害×AI活用",cat:"tech",gap:10,demand:9.4,supply:1.2,books:21,books_en:342,bsr:357870,revenue:138000,trend:[5,5.5,6.2,7.0,7.8,8.4,8.8,9.0,9.2,9.4],tags:["hot","new"],rank_delta:2},
+  {id:2,name:"ペット看取り・グリーフ",cat:"life",gap:9,demand:8.8,supply:1.8,books:34,books_en:1240,bsr:324049,revenue:52000,trend:[6,6.2,6.8,7.2,7.6,8.0,8.2,8.5,8.6,8.8],tags:["hot"],rank_delta:1},
+  {id:3,name:"更年期 漫画・コミック",cat:"health",gap:9,demand:8.5,supply:2.1,books:8,books_en:198,bsr:38474,revenue:68000,trend:[5.5,6,6.5,7,7.5,7.8,8,8.2,8.4,8.5],tags:["hot"],rank_delta:0},
+  {id:4,name:"発達障害 思春期",cat:"life",gap:9,demand:8.3,supply:1.5,books:6,books_en:524,bsr:280000,revenue:42000,trend:[5,5.5,6,6.5,7.2,7.6,8,8.1,8.2,8.3],tags:[],rank_delta:0},
+  {id:5,name:"睡眠×脳科学",cat:"health",gap:8,demand:9.2,supply:4.8,books:42,books_en:2840,bsr:226,revenue:1280000,trend:[7,7.2,7.5,7.8,8.2,8.5,8.8,9.0,9.1,9.2],tags:["hot","global"],rank_delta:-1},
+  {id:6,name:"投資初心者 2024",cat:"money",gap:7,demand:9.6,supply:7.2,books:62,books_en:4200,bsr:534,revenue:1580000,trend:[7.5,7.8,8,8.2,8.5,8.8,9,9.2,9.4,9.6],tags:["hot","global"],rank_delta:-2},
+  {id:7,name:"50代FIRE・セミリタイア",cat:"money",gap:8,demand:8.8,supply:5.2,books:191,books_en:1840,bsr:11863,revenue:128000,trend:[6,6.5,7,7.5,7.8,8.0,8.2,8.4,8.6,8.8],tags:["hot"],rank_delta:0},
+  {id:8,name:"腸活×ダイエット",cat:"health",gap:5,demand:9.1,supply:8.4,books:454,books_en:3200,bsr:263,revenue:1120000,trend:[7,7.2,7.5,7.8,8.2,8.5,8.8,9,9.0,9.1],tags:["global"],rank_delta:-3},
+  {id:9,name:"老後 一人生活",cat:"money",gap:7,demand:8.4,supply:4.2,books:8,books_en:892,bsr:11365,revenue:172000,trend:[6,6.2,6.5,7,7.4,7.8,8,8.2,8.3,8.4],tags:["hot"],rank_delta:1},
+  {id:10,name:"発達障害 女性",cat:"life",gap:9,demand:8.6,supply:2.0,books:12,books_en:624,bsr:240000,revenue:58000,trend:[5,5.5,6.2,6.8,7.2,7.6,8.0,8.3,8.5,8.6],tags:["hot"],rank_delta:1},
+  {id:11,name:"副業×AI自動化",cat:"tech",gap:8,demand:8.9,supply:3.2,books:28,books_en:1240,bsr:18000,revenue:92000,trend:[5,5.8,6.5,7,7.5,8,8.2,8.6,8.8,8.9],tags:["hot","new"],rank_delta:2},
+  {id:12,name:"更年期 漢方・食事療法",cat:"health",gap:8,demand:8.4,supply:2.8,books:9,books_en:342,bsr:82000,revenue:96000,trend:[5.5,6,6.5,7,7.4,7.8,8,8.2,8.3,8.4],tags:["hot"],rank_delta:0},
+  {id:13,name:"更年期 対策（全般）",cat:"health",gap:5,demand:9.0,supply:7.8,books:244,books_en:2140,bsr:38474,revenue:88000,trend:[7,7.2,7.5,7.8,8.2,8.5,8.8,8.9,9.0,9.0],tags:["global"],rank_delta:-1},
+  {id:14,name:"ダイエット 本",cat:"health",gap:3,demand:9.5,supply:9.2,books:820,books_en:8400,bsr:877,revenue:1880000,trend:[8,8.2,8.4,8.6,8.8,9.0,9.2,9.3,9.4,9.5],tags:["global"],rank_delta:-4},
+  {id:15,name:"FIRE 投資",cat:"money",gap:6,demand:8.8,supply:6.2,books:191,books_en:3200,bsr:67195,revenue:52000,trend:[6.5,7,7.2,7.5,7.8,8.0,8.2,8.4,8.6,8.8],tags:["hot"],rank_delta:0},
+];
+
+const GLOBAL_NICHES = [
+  {flag:'🇺🇸',country:'英語市場',name:'FIRE×禅的生活',category:'マネー・ライフスタイル',bsr_en:1240,books_en:84,revenue_en:580000,books_jp:0,opp:'high',desc:'経済的自立と精神的豊かさを組み合わせたジャンル。日本語版ゼロ。'},
+  {flag:'🇺🇸',country:'英語市場',name:'更年期×筋トレ',category:'健康・フィットネス',bsr_en:1580,books_en:127,revenue_en:420000,books_jp:1,opp:'high',desc:'ホルモン変化期の筋力トレーニング。英語では大人気、日本語は1冊のみ。'},
+  {flag:'🇺🇸',country:'英語市場',name:'AI副業完全自動化',category:'ビジネス・テック',bsr_en:890,books_en:203,revenue_en:680000,books_jp:2,opp:'high',desc:'AIツールで収益を自動化する手法書。英語市場では激戦区だが日本語は空白。'},
+  {flag:'🇰🇷',country:'韓国市場',name:'50代デジタルデトックス',category:'ライフスタイル',bsr_en:2100,books_en:45,revenue_en:280000,books_jp:0,opp:'high',desc:'韓国でベストセラー。スマホ依存解消×シニア層向け。日本語版未存在。'},
+  {flag:'🇰🇷',country:'韓国市場',name:'孤独死を防ぐコミュニティ術',category:'ライフ・社会',bsr_en:1870,books_en:38,revenue_en:240000,books_jp:0,opp:'high',desc:'高齢化社会の孤立問題。韓国社会問題として注目。日本でも需要確実。'},
+  {flag:'🇺🇸',country:'英語市場',name:'犬のホリスティックケア大全',category:'ペット・健康',bsr_en:1420,books_en:156,revenue_en:360000,books_jp:1,opp:'high',desc:'自然療法・食事・アロマを組み合わせたペットケア。英語版多数、日本語1冊。'},
+  {flag:'🇨🇳',country:'中国市場',name:'老後1人暮らし完全攻略',category:'ライフ・マネー',bsr_en:3200,books_en:62,revenue_en:190000,books_jp:3,opp:'mid',desc:'おひとり様老後の家計・孤独・健康を網羅した中国ベストセラー。'},
+  {flag:'🇺🇸',country:'英語市場',name:'発達障害×起業家思考',category:'ビジネス・ライフ',bsr_en:1680,books_en:91,revenue_en:310000,books_jp:0,opp:'high',desc:'ADHDを強みに変えるビジネス本。英語市場で急成長中。日本語ゼロ。'},
+  {flag:'🇰🇷',country:'韓国市場',name:'腸活×メンタルヘルス',category:'健康',bsr_en:2400,books_en:53,revenue_en:210000,books_jp:2,opp:'high',desc:'腸脳相関を活用したメンタル改善法。韓国でトレンド、日本語版2冊のみ。'},
+];
+
+const SEARCH_DATA = [
+  // ★超穴場（競合少・既存本が弱い）Amazon実データ 2026年6月調査
+  {kw:"発達障害 AI",cat:"tech",vol:3000,trend:"up",books:21,bsr:357870,revenue:138000,chance:94,series:false},
+  {kw:"ペット 看取り",cat:"life",vol:3400,trend:"up",books:34,bsr:324049,revenue:52000,chance:88,series:false},
+  {kw:"更年期 漫画",cat:"health",vol:4000,trend:"up",books:8,bsr:38474,revenue:68000,chance:91,series:true},
+  {kw:"発達障害 思春期",cat:"life",vol:4000,trend:"up",books:6,bsr:280000,revenue:42000,chance:92,series:false},
+  {kw:"更年期 ダイエット",cat:"health",vol:9000,trend:"up",books:6,bsr:74000,revenue:88000,chance:90,series:false},
+  // ★穴場×強市場（最重要発見！）
+  {kw:"スマホ脳",cat:"health",vol:28000,trend:"up",books:71,bsr:13,revenue:980000,chance:85,series:false},
+  {kw:"発達障害 女性",cat:"life",vol:7000,trend:"up",books:12,bsr:240000,revenue:58000,chance:89,series:false},
+  {kw:"更年期 漢方",cat:"health",vol:18000,trend:"up",books:9,bsr:82000,revenue:96000,chance:89,series:false},
+  {kw:"発達障害 マンガ",cat:"life",vol:5000,trend:"up",books:6,bsr:260000,revenue:38000,chance:90,series:true},
+  // ★穴場（競合少ない・市場成長中）
+  {kw:"発達障害 グレーゾーン",cat:"life",vol:13000,trend:"up",books:15,bsr:180000,revenue:62000,chance:87,series:false},
+  {kw:"老後 一人",cat:"money",vol:6800,trend:"up",books:8,bsr:11365,revenue:172000,chance:83,series:false},
+  {kw:"発達障害 仕事",cat:"life",vol:8000,trend:"up",books:18,bsr:19333,revenue:148000,chance:84,series:false},
+  {kw:"睡眠改善",cat:"health",vol:22000,trend:"up",books:9,bsr:2760,revenue:228000,chance:82,series:false},
+  // ★中程度（需要あり・競合もそれなり）
+  {kw:"AI活用 仕事",cat:"tech",vol:18000,trend:"up",books:320,bsr:2043,revenue:128000,chance:46,series:false},
+  {kw:"副業 AI",cat:"tech",vol:15000,trend:"up",books:180,bsr:3089,revenue:92000,chance:52,series:false},
+  {kw:"子育て 本",cat:"life",vol:12000,trend:"up",books:480,bsr:2574,revenue:88000,chance:38,series:false},
+  {kw:"メンタル 強くなる",cat:"health",vol:11000,trend:"up",books:320,bsr:5874,revenue:72000,chance:44,series:false},
+  // ★激戦区（需要大・強敵あり）
+  {kw:"自律神経 整える",cat:"health",vol:74000,trend:"up",books:280,bsr:4,revenue:1280000,chance:42,series:true},
+  {kw:"投資 初心者 本",cat:"money",vol:15000,trend:"up",books:62,bsr:534,revenue:312000,chance:64,series:true},
+  {kw:"習慣 本",cat:"health",vol:22000,trend:"up",books:580,bsr:927,revenue:480000,chance:28,series:true},
+  {kw:"腸活 本",cat:"health",vol:7000,trend:"up",books:454,bsr:24000,revenue:112000,chance:22,series:true},
+  {kw:"更年期 対策",cat:"health",vol:74200,trend:"up",books:244,bsr:38474,revenue:88000,chance:38,series:true},
+];
+
+const COMPETITORS = [
+  // [0] 発達障害 AI（21冊 超穴場 2026年6月実調査）
+  [
+    {title:"ChatGPTで発達障害の生活改革",author:'著者名',price:980,bsr:450162,stars:4.0,reviews:3,revenue:4200,pages:120,date:"2025-11",ku:true,kw:[],sentiment:{pos:80,neg:20},missing:["具体的プロンプト集","スマホ設定手順","失敗例と対策"]},
+    {title:"発達障害とAI活用術",author:'著者名',price:1100,bsr:140179,stars:3.8,reviews:5,revenue:8400,pages:98,date:"2025-08",ku:true,kw:[],sentiment:{pos:75,neg:25},missing:["動画解説","図解","実例ビフォーアフター"]},
+    {title:"ADHDのためのAI時間管理",author:'著者名',price:880,bsr:785902,stars:4.2,reviews:2,revenue:1800,pages:88,date:"2025-12",ku:false,kw:[],sentiment:{pos:85,neg:15},missing:["スケジュールテンプレ","スマホアプリ連携","コスト0円ツール"]},
+    {title:"発達障害×AI仕事術",author:'著者名',price:1200,bsr:55238,stars:4.3,reviews:12,revenue:18000,pages:156,date:"2025-06",ku:true,kw:[],sentiment:{pos:82,neg:18},missing:["職種別活用例","上司との交渉術","副業への応用"]},
+    {title:"グレーゾーンのためのAI活用ガイド",author:'著者名',price:980,bsr:320000,stars:3.9,reviews:4,revenue:2800,pages:110,date:"2026-01",ku:true,kw:[],sentiment:{pos:78,neg:22},missing:["診断前の対処法","家族向け説明","就労支援との連携"]}
+  ],
+  // [1] ペット 看取り（34冊 穴場 2026年6月実調査）
+  [
+    {title:"猫の看取りと悲嘆ケア",author:'著者名',price:1485,bsr:49894,stars:4.1,reviews:28,revenue:48000,pages:180,date:"2024-08",ku:false,kw:[],sentiment:{pos:79,neg:21},missing:["ペット霊園の選び方","遺骨アクセサリー","SNSグリーフ支援"]},
+    {title:"犬の最後の日々",author:'著者名',price:1540,bsr:28753,stars:4.4,reviews:42,revenue:72000,pages:192,date:"2024-03",ku:false,kw:[],sentiment:{pos:83,neg:17},missing:["在宅ホスピス費用","緩和ケア薬の使い方","家族の心のケア"]},
+    {title:"愛犬の旅立ちに寄り添う",author:'著者名',price:1320,bsr:620452,stars:3.8,reviews:8,revenue:3200,pages:144,date:"2023-11",ku:false,kw:[],sentiment:{pos:74,neg:26},missing:["具体的な症状サイン","夜間緊急対応","ペットロス専門窓口"]},
+    {title:"ペットロスを乗り越える",author:'著者名',price:1210,bsr:425795,stars:4.0,reviews:15,revenue:5800,pages:168,date:"2024-01",ku:false,kw:[],sentiment:{pos:81,neg:19},missing:["子供への説明","再び飼うべきか","記念品の作り方"]},
+    {title:"老犬介護の完全ガイド",author:'著者名',price:1650,bsr:495351,stars:4.2,reviews:19,revenue:4200,pages:224,date:"2023-06",ku:false,kw:[],sentiment:{pos:77,neg:23},missing:["認知症対応","夜鳴き対策","介護保険的サービス"]}
+  ],
+  // [2] 50代FIRE（191冊 激戦区）
+  [
+    {title:"ゆるFIRE",author:'著者名',price:1540,bsr:11863,stars:4.3,reviews:312,revenue:128000,pages:240,date:"2023-08",ku:true,kw:[],sentiment:{pos:84,neg:16},missing:["FIRE後の社会保険","物価上昇対策","副業収入の安定化"]},
+    {title:"サイドFIRE入門",author:'著者名',price:1430,bsr:46029,stars:4.1,reviews:189,revenue:52000,pages:216,date:"2024-02",ku:false,kw:[],sentiment:{pos:80,neg:20},missing:["税金最適化","地方移住","フリーランス転換"]},
+    {title:"40代からのFIRE戦略",author:'著者名',price:1650,bsr:143694,stars:4.0,reviews:87,revenue:18000,pages:264,date:"2023-11",ku:false,kw:[],sentiment:{pos:78,neg:22},missing:["子供の教育費との両立","住宅ローン完済計画","介護費用の備え"]},
+    {title:"FIRE後の生活設計",author:'著者名',price:1320,bsr:98000,stars:4.2,reviews:134,revenue:28000,pages:192,date:"2024-05",ku:true,kw:[],sentiment:{pos:82,neg:18},missing:["医療費の現実","パートナーとの合意","精神的充実感"]},
+    {title:"新NISA完全攻略 FIRE実現篇",author:'著者名',price:1760,bsr:22000,stars:4.4,reviews:256,revenue:88000,pages:288,date:"2024-06",ku:false,kw:[],sentiment:{pos:86,neg:14},missing:["暴落時の対応","出口戦略","円安リスク"]}
+  ],
+  // [3] 発達障害 仕事術（89冊 中程度）
+  [
+    {title:"マンガでわかる発達障害の仕事術",author:'著者名',price:1320,bsr:19333,stars:4.5,reviews:423,revenue:148000,pages:176,date:"2023-04",ku:true,kw:[],sentiment:{pos:88,neg:12},missing:["リモートワーク対応","上司への開示","昇進の可能性"]},
+    {title:"ADHD社会人の成功ルーティン",author:'著者名',price:1100,bsr:34000,stars:4.2,reviews:198,revenue:62000,pages:152,date:"2024-01",ku:true,kw:[],sentiment:{pos:83,neg:17},missing:["会議対策","メール管理","テレワーク環境整備"]},
+    {title:"特性を強みにする発達障害の働き方",author:'著者名',price:1540,bsr:58000,stars:4.1,reviews:156,revenue:38000,pages:208,date:"2024-03",ku:false,kw:[],sentiment:{pos:81,neg:19},missing:["職種適性診断","転職実例","給与交渉術"]},
+    {title:"グレーゾーン社員の取扱説明書",author:'著者名',price:1430,bsr:72000,stars:4.0,reviews:89,revenue:22000,pages:184,date:"2024-06",ku:false,kw:[],sentiment:{pos:79,neg:21},missing:["管理職向け指導法","チームビルディング","評価制度の活用"]},
+    {title:"発達障害でも稼げる副業図鑑",author:'著者名',price:1210,bsr:48000,stars:4.3,reviews:234,revenue:44000,pages:168,date:"2024-04",ku:true,kw:[],sentiment:{pos:85,neg:15},missing:["初期費用ゼロの副業","確定申告サポート","継続できる仕組み"]}
+  ],
+  // [4] 睡眠 × 認知症予防（42冊 中程度）
+  [
+    {title:"快眠法の前に知りたかったこと",author:'著者名',price:1540,bsr:226,stars:4.6,reviews:1842,revenue:1280000,pages:256,date:"2023-02",ku:true,kw:[],sentiment:{pos:91,neg:9},missing:["スマホ依存症対策","シフト勤務者向け","睡眠薬との比較"]},
+    {title:"不夜脳",author:'著者名',price:1650,bsr:9659,stars:4.3,reviews:542,revenue:188000,pages:232,date:"2024-04",ku:false,kw:[],sentiment:{pos:86,neg:14},missing:["女性ホルモンとの関係","更年期の不眠対策","子供の睡眠教育"]},
+    {title:"スタンフォード式最高の睡眠",author:'著者名',price:1540,bsr:12533,stars:4.4,reviews:2134,revenue:148000,pages:240,date:"2017-10",ku:false,kw:[],sentiment:{pos:88,neg:12},missing:["最新研究との比較","日本人データ","実践記録シート"]},
+    {title:"熟睡できる人の時間術",author:'著者名',price:1210,bsr:28699,stars:4.2,reviews:378,revenue:72000,pages:192,date:"2024-01",ku:false,kw:[],sentiment:{pos:84,neg:16},missing:["夜型体質の改善","昼寝の効果的な取り方","週末の睡眠調整"]},
+    {title:"ぐっすり眠れる認知症予防",author:'著者名',price:1320,bsr:39466,stars:4.1,reviews:234,revenue:48000,pages:168,date:"2024-06",ku:true,kw:[],sentiment:{pos:82,neg:18},missing:["介護者の睡眠確保","夜間徘徊の対応","薬に頼らない方法"]}
+  ],
+  // [5] 更年期 対策（244冊 激戦区）
+  [
+    {title:"マンガ100人の更年期症状",author:'著者名',price:1320,bsr:38474,stars:4.3,reviews:287,revenue:52000,pages:160,date:"2024-01",ku:true,kw:[],sentiment:{pos:85,neg:15},missing:["男性更年期との比較","仕事と両立","パートナーへの説明"]},
+    {title:"更年期を味方にする食事術",author:'著者名',price:1430,bsr:42511,stars:4.1,reviews:198,revenue:44000,pages:184,date:"2024-03",ku:false,kw:[],sentiment:{pos:83,neg:17},missing:["手軽なレシピ","コンビニ活用法","サプリとの組み合わせ"]},
+    {title:"はじめての更年期ホルモン補充療法",author:'著者名',price:1540,bsr:39211,stars:4.2,reviews:312,revenue:54000,pages:208,date:"2024-02",ku:false,kw:[],sentiment:{pos:82,neg:18},missing:["副作用の詳細","保険適用の手続き","クリニックの選び方"]},
+    {title:"更年期のイライラがなくなる本",author:'著者名',price:1210,bsr:70759,stars:4.4,reviews:423,revenue:38000,pages:176,date:"2023-11",ku:true,kw:[],sentiment:{pos:87,neg:13},missing:["職場でのイライラ管理","夫への伝え方","子育て中の対応"]},
+    {title:"更年期の漢方大全",author:'著者名',price:1650,bsr:157006,stars:4.0,reviews:134,revenue:18000,pages:256,date:"2023-08",ku:false,kw:[],sentiment:{pos:80,neg:20},missing:["市販薬との比較","費用の目安","体質チェックリスト"]}
+  ],
+  // [6] 老後 一人（206冊 中程度）
+  [
+    {title:"老後ひとり難民",author:'著者名',price:880,bsr:11365,stars:4.2,reviews:456,revenue:128000,pages:192,date:"2023-06",ku:false,kw:[],sentiment:{pos:83,neg:17},missing:["地域コミュニティの作り方","デジタル活用","緊急時の備え"]},
+    {title:"おひとりさまの老後",author:'著者名',price:1320,bsr:26245,stars:4.3,reviews:1892,revenue:92000,pages:240,date:"2007-07",ku:false,kw:[],sentiment:{pos:85,neg:15},missing:["2024年制度改正対応","デジタル遺言","SNS活用法"]},
+    {title:"70歳から輝くひとり生活",author:'著者名',price:1210,bsr:70456,stars:4.1,reviews:234,revenue:28000,pages:176,date:"2024-04",ku:true,kw:[],sentiment:{pos:82,neg:18},missing:["認知症初期の対応","近所付き合いの極意","趣味で稼ぐ方法"]},
+    {title:"おひとりさまの老後資金計画",author:'著者名',price:1540,bsr:76464,stars:4.0,reviews:167,revenue:22000,pages:208,date:"2024-01",ku:false,kw:[],sentiment:{pos:80,neg:20},missing:["年金最適化","相続の基本","老人ホーム費用の現実"]},
+    {title:"孤独を力に変える老後の生き方",author:'著者名',price:990,bsr:792543,stars:3.9,reviews:89,revenue:2800,pages:144,date:"2023-04",ku:false,kw:[],sentiment:{pos:78,neg:22},missing:["友人の作り方","ボランティア活用","自分史の書き方"]}
+  ],
+  // [7] 腸活（454冊 激戦区）
+  [
+    {title:"ごきげん腸活作りおきレシピ",author:'著者名',price:1320,bsr:263,stars:4.5,reviews:2341,revenue:1120000,pages:176,date:"2023-09",ku:false,kw:[],sentiment:{pos:90,neg:10},missing:["時短バージョン","外食時の選び方","男性向けアレンジ"]},
+    {title:"腸活のすべて",author:'著者名',price:1430,bsr:11479,stars:4.3,reviews:892,revenue:188000,pages:224,date:"2024-02",ku:false,kw:[],sentiment:{pos:87,neg:13},missing:["最新研究","サプリの選び方","症状別対策"]},
+    {title:"Tarzan特別編集 腸活パーフェクトガイド",author:'Tarzan編集部',price:990,bsr:51507,stars:4.2,reviews:234,revenue:44000,pages:128,date:"2024-05",ku:true,kw:[],sentiment:{pos:85,neg:15},missing:["高齢者向け","持病ありの人向け","ストレスとの関係"]},
+    {title:"更年期に効く腸活",author:'著者名',price:1320,bsr:84000,stars:4.1,reviews:178,revenue:24000,pages:160,date:"2024-03",ku:false,kw:[],sentiment:{pos:83,neg:17},missing:["ホルモンと腸の詳細","漢方との組み合わせ","症状が改善する期間"]},
+    {title:"腸活×ダイエット 最強の組み合わせ",author:'著者名',price:1210,bsr:38000,stars:4.2,reviews:312,revenue:58000,pages:184,date:"2024-01",ku:true,kw:[],sentiment:{pos:84,neg:16},missing:["停滞期の乗り越え方","リバウンド防止","外食チェーン活用法"]}
+  ],
+  // [8] 投資 初心者（激戦区 BSR534の強敵あり）
+  [
+    {title:"本当の自由を手に入れるお金の大学",author:'両@リベ大学長',price:1540,bsr:534,stars:4.6,reviews:18423,revenue:1580000,pages:368,date:"2020-06",ku:false,kw:[],sentiment:{pos:92,neg:8},missing:["2024年新NISA対応版","10代向け","投資初日の具体的手順"]},
+    {title:"5年で1億円をつくる方法",author:'著者名',price:1650,bsr:710,stars:4.4,reviews:2341,revenue:1180000,pages:296,date:"2024-01",ku:false,kw:[],sentiment:{pos:88,neg:12},missing:["サラリーマン向け詳細","失敗リスクの明記","税金の最適化"]},
+    {title:"新NISA超入門",author:'著者名',price:1210,bsr:3752,stars:4.3,reviews:1892,revenue:228000,pages:192,date:"2023-12",ku:false,kw:[],sentiment:{pos:87,neg:13},missing:["iDeCoとの組み合わせ","出口戦略","暴落時の対応"]},
+    {title:"投資初心者の教科書 2024年版",author:'著者名',price:1430,bsr:11016,stars:4.2,reviews:567,revenue:88000,pages:240,date:"2023-11",ku:true,kw:[],sentiment:{pos:85,neg:15},missing:["スマホだけで完結","月1万円から","円安対策"]},
+    {title:"ほったらかし投資術",author:'著者名',price:924,bsr:13365,stars:4.4,reviews:3421,revenue:78000,pages:176,date:"2022-04",ku:false,kw:[],sentiment:{pos:89,neg:11},missing:["新NISA完全対応","老後2000万問題との接続","生命保険との関係"]}
+  ],
+  // [9] 副業 AI 自動化
+  [
+    {title:"70代で月収30万円！AI副業入門",author:'著者名',price:1320,bsr:48000,stars:4.2,reviews:234,revenue:44000,pages:152,date:"2026-03",ku:true,kw:[],sentiment:{pos:84,neg:16},missing:["年金との調整","税務の基本","スマホだけで始める方法"]},
+    {title:"note×AI副業で月10万円",author:'著者名',price:1683,bsr:62000,stars:4.0,reviews:178,revenue:32000,pages:168,date:"2026-02",ku:false,kw:[],sentiment:{pos:81,neg:19},missing:["有料note設定の具体手順","フォロワーゼロから","収益化までの期間"]},
+    {title:"ChatGPTで作るKindleコンテンツ",author:'著者名',price:1100,bsr:35000,stars:4.3,reviews:312,revenue:52000,pages:136,date:"2025-08",ku:true,kw:[],sentiment:{pos:85,neg:15},missing:["著作権の注意点","アカウント停止リスク","品質チェック法"]},
+    {title:"AI自動化で稼ぐ副業大全",author:'著者名',price:1540,bsr:28000,stars:4.1,reviews:423,revenue:68000,pages:208,date:"2025-11",ku:false,kw:[],sentiment:{pos:83,neg:17},missing:["初期投資ゼロの方法","本業がバレない対策","法人化のタイミング"]},
+    {title:"サラリーマンのAI副業入門",author:'著者名',price:1210,bsr:18000,stars:4.4,reviews:567,revenue:92000,pages:176,date:"2025-10",ku:true,kw:[],sentiment:{pos:87,neg:13},missing:["就業規則の確認法","確定申告の具体手順","副業がバレた実例"]}
+  ]
+];
+
+// =======================================
+// 状態管理
+// =======================================
+let activeFilters = {global: true, hot: false, new: false};
+
+// =======================================
+// 初期化
+// =======================================
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('last-updated-txt').textContent = lastUpdated;
+  initTicker();
+  renderKPIs();
+  renderRanking();
+  initRankingCharts();
+  renderGlobalCards();
+  renderCompetitor();
+});
+
+// =======================================
+// ティッカー
+// =======================================
+function initTicker() {
+  const hot = NICHES.filter(n=>n.tags.includes('hot')).slice(0,5);
+  const items = hot.map(n=>`<span class="ticker-item">🔥 <span class="hot">${n.name}</span> — 需給ギャップ <span class="up">${n.gap}pt</span> ／ 推定月収 ¥${(n.revenue/10000).toFixed(0)}万</span>`);
+  const full = [...items,...items].join('');
+  document.getElementById('ticker-inner').innerHTML = full;
+}
+
+// =======================================
+// タブ切り替え
+// =======================================
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  const idx = ['ranking','search','global','ideas','comp'].indexOf(name);
+  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  if(name==='search'){renderSearchTable();initSearchCharts();}
+  if(name==='global'){initGlobalCharts();}
+  if(name==='comp'){renderCompetitor();}
+}
+
+// =======================================
+// KPIカード
+// =======================================
+function renderKPIs() {
+  const sRank = NICHES.filter(n=>n.gap>=9).length;
+  const maxNiche = NICHES.reduce((a,b)=>a.gap>b.gap?a:b);
+  const avgRev = Math.round(NICHES.slice(0,10).reduce((a,b)=>a+b.revenue,0)/10);
+  const globalOnly = GLOBAL_NICHES.filter(n=>n.books_jp===0).length;
+  const avgBooks = (NICHES.reduce((a,b)=>a+b.books,0)/NICHES.length).toFixed(1);
+  const hot = NICHES.filter(n=>n.tags.includes('hot'))[0];
+  const cards = [
+    {label:'分析ニッチ総数',value:`${NICHES.length}件`,sub:'+ 毎週更新'},
+    {label:'需給ギャップ最高ニッチ',value:maxNiche.gap,sub:maxNiche.name},
+    {label:'平均推定月収（上位10）',value:`¥${(avgRev/10000).toFixed(0)}万`,sub:'70%印税率換算'},
+    {label:'海外のみ存在ニッチ',value:`${globalOnly}件`,sub:'日本語版ゼロ'},
+    {label:'平均競合書籍数',value:`${avgBooks}冊`,sub:'少ないほど参入チャンス'},
+    {label:'Sランクニッチ数',value:`${sRank}件`,sub:'スコア9.0以上'},
+  ];
+  document.getElementById('kpi-cards').innerHTML = cards.map(c=>`
+    <div class="kpi-card">
+      <div class="kpi-label">${c.label}</div>
+      <div class="kpi-value">${c.value}</div>
+      <div class="kpi-sub">${c.sub}</div>
+    </div>`).join('');
+}
+
+// =======================================
+// ランキング
+// =======================================
+function toggleTag(tag) {
+  activeFilters[tag] = !activeFilters[tag];
+  document.getElementById('tag-'+tag).classList.toggle('active', activeFilters[tag]);
+  renderRanking();
+}
+
+function getGapRank(gap) {
+  if(gap>=9) return 'S';
+  if(gap>=7) return 'A';
+  if(gap>=5) return 'B';
+  return 'C';
+}
+
+function catLabel(cat) {
+  return {health:'健康',money:'マネー',life:'ライフ',tech:'テック',hobby:'趣味',biz:'ビジネス',child:'育児'}[cat]||cat;
+}
+
+function renderRanking() {
+  const catF  = document.getElementById('cat-filter').value;
+  const scoreF= document.getElementById('score-filter').value;
+  const textF = document.getElementById('text-filter').value.toLowerCase();
+  const sortV = document.getElementById('sort-select').value;
+
+  let data = NICHES.filter(n=>{
+    if(catF && n.cat!==catF) return false;
+    if(scoreF && getGapRank(n.gap)!==scoreF) return false;
+    if(textF && !n.name.toLowerCase().includes(textF)) return false;
+    if(activeFilters.global && !n.tags.includes('global')) return false;
+    if(activeFilters.hot && !n.tags.includes('hot')) return false;
+    if(activeFilters.new && !n.tags.includes('new')) return false;
+    return true;
+  });
+
+  data.sort((a,b)=>{
+    if(sortV==='gap') return b.gap-a.gap;
+    if(sortV==='demand') return b.demand-a.demand;
+    if(sortV==='revenue') return b.revenue-a.revenue;
+    if(sortV==='books') return a.books-b.books;
+    return 0;
+  });
+
+  const bsrCls = bsr => bsr<=3000?'bsr-green':bsr<=6000?'bsr-yellow':'bsr-gray';
+  const booksCls = b => b<=5?'books-green':b<=10?'books-yellow':'books-red';
+  const trendIcon = arr => {
+    const d = arr[arr.length-1]-arr[arr.length-3];
+    return d>0?'📈':d<0?'📉':'➡️';
+  };
+
+  const rows = data.map((n,i)=>{
+    const rank = getGapRank(n.gap);
+    const delta = n.rank_delta>0?`<span style="color:var(--green)">▲${n.rank_delta}</span>`:
+                  n.rank_delta<0?`<span style="color:var(--red)">▼${Math.abs(n.rank_delta)}</span>`:'—';
+    const tags = n.tags.map(t=>`<span class="tag tag-${t}">${{hot:'🔥急上昇',new:'🆕今週',global:'🌍海外',season:'📅季節'}[t]||t}</span>`).join('');
+    return `<tr>
+      <td>${i+1} ${delta}</td>
+      <td><b>${n.name}</b><br>${tags}</td>
+      <td>${catLabel(n.cat)}</td>
+      <td><span class="badge badge-${rank}">${rank}</span> ${n.gap}</td>
+      <td>${n.demand}</td>
+      <td>${n.supply}</td>
+      <td class="${booksCls(n.books)}">${n.books}冊</td>
+      <td style="color:var(--text2)">${n.books_en}</td>
+      <td class="${bsrCls(n.bsr)}">${n.bsr.toLocaleString()}</td>
+      <td style="color:var(--green)">¥${(n.revenue/10000).toFixed(0)}万</td>
+      <td>${trendIcon(n.trend)}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('ranking-tbody').innerHTML = rows || '<tr><td colspan="11" style="text-align:center;color:var(--text2);padding:20px">条件に合うニッチがありません</td></tr>';
+}
+
+// =======================================
+// ランキングチャート
+// =======================================
+function initRankingCharts() {
+  const cats = ['health','money','life','tech','hobby','biz','child'];
+  const catNames = cats.map(c=>catLabel(c));
+  const catAvg = cats.map(c=>{
+    const arr = NICHES.filter(n=>n.cat===c);
+    return arr.length ? (arr.reduce((a,b)=>a+b.gap,0)/arr.length).toFixed(2) : 0;
+  });
+
+  new Chart(document.getElementById('chart-cat'),{type:'bar',data:{labels:catNames,datasets:[{label:'平均需給ギャップ',data:catAvg,backgroundColor:catAvg.map(v=>v>=8.5?'#f78166':v>=7?'#d29922':'#3fb950')}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:10}}}});
+
+  new Chart(document.getElementById('chart-scatter'),{type:'scatter',data:{datasets:[{label:'ニッチ',data:NICHES.map(n=>({x:n.books,y:n.revenue/10000,label:n.name})),backgroundColor:'#58a6ff80',pointRadius:7}]},options:{plugins:{tooltip:{callbacks:{label:ctx=>`${ctx.raw.label}: 競合${ctx.raw.x}冊 / 月収¥${ctx.raw.y.toFixed(0)}万`}}},scales:{x:{title:{display:true,text:'競合書籍数'}},y:{title:{display:true,text:'推定月収（万円）'}}}}});
+
+  const top5 = NICHES.slice(0,5);
+  const labels = Array.from({length:10},(_,i)=>`${i*3+1}日`);
+  new Chart(document.getElementById('chart-trend'),{type:'line',data:{labels,datasets:top5.map((n,i)=>({label:n.name,data:n.trend,borderColor:['#58a6ff','#3fb950','#f78166','#d29922','#bc8cff'][i],fill:false,tension:0.4,pointRadius:2}))},options:{plugins:{legend:{labels:{font:{size:10}}}},scales:{y:{min:4,max:10}}}});
+
+  const sPerCat = cats.map(c=>NICHES.filter(n=>n.cat===c&&n.gap>=9).length);
+  new Chart(document.getElementById('chart-donut'),{type:'doughnut',data:{labels:catNames,datasets:[{data:sPerCat,backgroundColor:['#f78166','#58a6ff','#3fb950','#bc8cff','#d29922','#f0883e','#ff7b72']}]},options:{plugins:{legend:{position:'right',labels:{font:{size:10}}}}}});
+}
+
+// =======================================
+// Kindle JP 検索分析
+// =======================================
+function renderSearchTable() {
+  const catF  = document.getElementById('search-cat-filter').value;
+  const sortV = document.getElementById('search-sort').value;
+  const textF = document.getElementById('search-text').value.toLowerCase();
+
+  let data = SEARCH_DATA.filter(d=>{
+    if(catF && d.cat!==catF) return false;
+    if(textF && !d.kw.toLowerCase().includes(textF)) return false;
+    return true;
+  });
+
+  data.sort((a,b)=>{
+    if(sortV==='vol') return b.vol-a.vol;
+    if(sortV==='chance') return b.chance-a.chance;
+    if(sortV==='books') return a.books-b.books;
+    if(sortV==='revenue') return b.revenue-a.revenue;
+    return 0;
+  });
+
+  const chanceCls = c => c>=90?'chance-high':c>=70?'chance-mid':'';
+  const trendIcon = t => t==='up'?'📈 上昇中':t==='down'?'📉 下降中':'➡️ 横ばい';
+  const bsrCls = bsr => bsr<=3000?'bsr-green':bsr<=6000?'bsr-yellow':'bsr-gray';
+  const booksCls = b => b<=5?'books-green':b<=10?'books-yellow':'books-red';
+
+  const rows = data.map((d,i)=>`<tr>
+    <td>${i+1}</td>
+    <td><b>${d.kw}</b></td>
+    <td>${catLabel(d.cat)}</td>
+    <td style="color:var(--blue);font-weight:600">${d.vol.toLocaleString()}</td>
+    <td>${trendIcon(d.trend)}</td>
+    <td class="${booksCls(d.books)}">${d.books}冊</td>
+    <td class="${bsrCls(d.bsr)}">${d.bsr.toLocaleString()}</td>
+    <td style="color:var(--green)">¥${(d.revenue/10000).toFixed(0)}万</td>
+    <td class="${chanceCls(d.chance)}">${d.chance}点</td>
+    <td>${d.series?'<span style="color:var(--green)">✓ あり</span>':'—'}</td>
+  </tr>`).join('');
+
+  document.getElementById('search-tbody').innerHTML = rows;
+}
+
+let _searchChartsInit = false;
+function initSearchCharts() {
+  if(_searchChartsInit) return;
+  _searchChartsInit = true;
+
+  const top10chance = [...SEARCH_DATA].sort((a,b)=>b.chance-a.chance).slice(0,10);
+  new Chart(document.getElementById('chart-search-chance'),{type:'bar',data:{labels:top10chance.map(d=>d.kw),datasets:[{label:'穴場スコア',data:top10chance.map(d=>d.chance),backgroundColor:top10chance.map(d=>d.chance>=90?'#f78166':d.chance>=70?'#d29922':'#3fb950')}]},options:{indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:0,max:100}}}});
+
+  new Chart(document.getElementById('chart-search-bubble'),{type:'bubble',data:{datasets:[{label:'キーワード',data:SEARCH_DATA.map(d=>({x:d.books,y:d.vol/1000,r:Math.sqrt(d.revenue/5000),label:d.kw})),backgroundColor:'#58a6ff60'}]},options:{plugins:{tooltip:{callbacks:{label:ctx=>`${ctx.raw.label}: 検索${(ctx.raw.y*1000).toLocaleString()} / 競合${ctx.raw.x}冊`}}},scales:{x:{title:{display:true,text:'競合書籍数'}},y:{title:{display:true,text:'月間検索数（千）'}}}}});
+
+  const top10vol = [...SEARCH_DATA].sort((a,b)=>b.vol-a.vol).slice(0,10);
+  new Chart(document.getElementById('chart-search-vol'),{type:'bar',data:{labels:top10vol.map(d=>d.kw),datasets:[{label:'月間検索数',data:top10vol.map(d=>d.vol),backgroundColor:'#58a6ff80'}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+
+  const cats = ['health','money','life','tech'];
+  const catAvgChance = cats.map(c=>{
+    const arr = SEARCH_DATA.filter(d=>d.cat===c);
+    return arr.length?(arr.reduce((a,b)=>a+b.chance,0)/arr.length).toFixed(1):0;
+  });
+  new Chart(document.getElementById('chart-search-cat'),{type:'doughnut',data:{labels:cats.map(catLabel),datasets:[{data:catAvgChance,backgroundColor:['#f78166','#58a6ff','#3fb950','#bc8cff']}]},options:{plugins:{legend:{position:'right'}}}});
+}
+
+// =======================================
+// 海外ニッチカード
+// =======================================
+function renderGlobalCards() {
+  const html = GLOBAL_NICHES.map(n=>`
+    <div class="card">
+      <div class="card-header">
+        <span class="card-flag">${n.flag}</span>
+        <span class="${n.opp==='high'?'chance-high':'chance-mid'}">${n.opp==='high'?'🟢 極めて高い':'🟡 高い'}</span>
+      </div>
+      <div class="card-title">${n.name}</div>
+      <div class="card-cat">${n.country} ／ ${n.category}</div>
+      <p style="font-size:12px;color:var(--text2);margin-top:8px">${n.desc}</p>
+      <div class="card-metrics">
+        <div class="card-metric"><div class="card-metric-label">海外BSR</div><div class="card-metric-value">${n.bsr_en.toLocaleString()}</div></div>
+        <div class="card-metric"><div class="card-metric-label">海外競合数</div><div class="card-metric-value">${n.books_en}冊</div></div>
+        <div class="card-metric"><div class="card-metric-label">海外推定月収</div><div class="card-metric-value">¥${(n.revenue_en/10000).toFixed(0)}万</div></div>
+        <div class="card-metric"><div class="card-metric-label">JP競合数</div><div class="card-metric-value ${n.books_jp===0?'chance-high':''}">${n.books_jp}冊</div></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('global-cards').innerHTML = html;
+}
+
+let _globalChartsInit = false;
+function initGlobalCharts() {
+  if(_globalChartsInit) return;
+  _globalChartsInit = true;
+  const byCountry = {};
+  GLOBAL_NICHES.forEach(n=>{ byCountry[n.country]=(byCountry[n.country]||0)+1; });
+  new Chart(document.getElementById('chart-global-count'),{type:'bar',data:{labels:Object.keys(byCountry),datasets:[{label:'未参入ニッチ数',data:Object.values(byCountry),backgroundColor:['#58a6ff','#3fb950','#f78166']}]},options:{plugins:{legend:{display:false}}}});
+
+  const top5 = [...GLOBAL_NICHES].sort((a,b)=>b.revenue_en-a.revenue_en).slice(0,5);
+  new Chart(document.getElementById('chart-global-rev'),{type:'bar',data:{labels:top5.map(n=>n.name),datasets:[{label:'海外推定月収（万円）',data:top5.map(n=>n.revenue_en/10000),backgroundColor:'#d2992280'}]},options:{indexAxis:'y',plugins:{legend:{display:false}}}});
+}
+
+// =======================================
+// 書籍アイデア生成
+// =======================================
+function updateJpSeo() {
+  const niche = document.getElementById('gen-niche').value.trim();
+  const panel = document.getElementById('jp-seo-panel');
+  if(!niche){panel.innerHTML='';return;}
+
+  const matched = SEARCH_DATA.filter(d=>d.kw.includes(niche.slice(0,4))||niche.includes(d.kw.split(' ')[0])).slice(0,5);
+  if(!matched.length){panel.innerHTML='';return;}
+
+  const totalVol = matched.reduce((a,b)=>a+b.vol,0);
+  const avgBooks = Math.round(matched.reduce((a,b)=>a+b.books,0)/matched.length);
+  const kuRate = 0.65; // 仮定値
+  const kuRec = kuRate>=0.6;
+
+  const kwHtml = matched.map(d=>`<span class="seo-kw">${d.kw}<span>月${d.vol.toLocaleString()}検索</span></span>`).join('');
+  panel.innerHTML = `
+    <div class="seo-panel">
+      <h4>Kindle JP SEOパネル</h4>
+      <div class="seo-kw-list">${kwHtml}</div>
+      <div class="ku-rec ${kuRec?'yes':'no'}">
+        ${kuRec?'✅ KU登録推奨（このニッチのKU対応率65%以上）':'⚠️ KU登録は任意（このニッチのKU対応率は低め）'}
+      </div>
+      <div style="font-size:11px;color:var(--text2)">
+        タイトルに含めるべきKW: <b>${matched[0]?.kw||''}</b> ／ 月間検索ポテンシャル: ${totalVol.toLocaleString()}
+      </div>
+    </div>`;
+}
+
+function generateIdeas() {
+  const niche   = document.getElementById('gen-niche').value || '介護×AI活用';
+  const target  = document.getElementById('gen-target').value || 'シニア世代';
+  const price   = document.getElementById('gen-price').value;
+  const pages   = document.getElementById('gen-pages').value;
+  const kuSel   = document.getElementById('gen-ku').value;
+
+  const matched = SEARCH_DATA.find(d=>d.kw.includes(niche.slice(0,4))||niche.includes(d.kw.split(' ')[0]));
+  const kuRec   = kuSel==='auto' ? (matched ? true : false) : kuSel==='yes';
+
+  const titles = [
+    `【完全図解】${niche}で変わる人生 — ${target}のための実践ガイド`,
+    `${target}必読！${niche}最強攻略本 2026年版`,
+    `誰も教えてくれなかった${niche}の真実`,
+    `${niche}入門から実践まで — 結果が出る7ステップ`,
+    `専門家が明かす${niche}の成功法則`,
+  ];
+
+  const toc = [
+    {ch:'第1章', title:`なぜ今${niche}が注目されるのか`, diff:true},
+    {ch:'第2章', title:'現状分析と市場データ（最新2026年版）', diff:true},
+    {ch:'第3章', title:`${target}のための基礎知識`, diff:false},
+    {ch:'第4章', title:'ステップバイステップ実践法', diff:false},
+    {ch:'第5章', title:'競合書籍が扱っていない最新アプローチ', diff:true},
+    {ch:'第6章', title:'失敗事例と解決策10選', diff:true},
+    {ch:'第7章', title:'ツール・リソース完全リスト', diff:true},
+    {ch:'第8章', title:'90日アクションプラン', diff:false},
+  ];
+
+  const diffs = [
+    '2026年最新データ掲載（競合は2024年以前）',
+    `${target}向けに特化した具体的なケーススタディ`,
+    '実践ツール一覧と使い方テンプレート付き',
+    'QRコード付き補足動画・サポートリソース',
+    '90日アクションプラン（他書にない構成）',
+  ];
+
+  const monthlyRev = Math.round(price * 0.7 * (3000/1500) * (kuRec?1.3:1));
+  const annualRev  = monthlyRev * 12;
+
+  const palettes = [
+    {colors:['#1e3a5f','#2980b9'],label:'信頼×専門'},
+    {colors:['#8b4513','#d2691e'],label:'温かみ×親近感'},
+    {colors:['#1a1a1a','#f78166'],label:'モダン×シンプル'},
+    {colors:['#8b1a8b','#3fb950'],label:'女性向け×健康'},
+    {colors:['#005f9e','#f0c040'],label:'シニア向け×安心'},
+  ];
+
+  document.getElementById('gen-result').innerHTML = `
+    <div class="result-section">
+      <h3>タイトル候補（クリックで選択）</h3>
+      ${titles.map((t,i)=>`<div class="title-option" onclick="this.parentElement.querySelectorAll('.title-option').forEach(el=>el.classList.remove('selected'));this.classList.add('selected')">${i+1}. ${t}</div>`).join('')}
+    </div>
+    <div class="result-section">
+      <h3>推奨目次構成</h3>
+      ${toc.map(t=>`<div class="toc-item">${t.diff?'<span style="color:var(--green)">★</span>':'<span style="color:var(--text2)">○</span>'} <b>${t.ch}</b> ${t.title}${t.diff?' <span style="font-size:10px;color:var(--green)">（差別化）</span>':''}</div>`).join('')}
+    </div>
+    <div class="result-section">
+      <h3>差別化ポイント（競合0冊の要素）</h3>
+      ${diffs.map(d=>`<div class="diff-item">✓ ${d}</div>`).join('')}
+    </div>
+    <div class="result-section">
+      <h3>収益シミュレーション</h3>
+      <div class="sim-grid">
+        <div class="sim-card"><div class="sim-label">想定価格</div><div class="sim-val">¥${parseInt(price).toLocaleString()}</div></div>
+        <div class="sim-card"><div class="sim-label">推定月収</div><div class="sim-val">¥${monthlyRev.toLocaleString()}</div></div>
+        <div class="sim-card"><div class="sim-label">推定年収</div><div class="sim-val">¥${Math.round(annualRev/10000)}万</div></div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--text2)">
+        KU登録: ${kuRec?'<span style="color:var(--green)">推奨（KU収益含む）</span>':'<span style="color:var(--text2)">非推奨</span>'}
+        ／ 70%印税率 ／ BSR想定: 2,000〜4,000
+      </div>
+    </div>
+    <div class="result-section">
+      <h3>表紙カラーパレット提案</h3>
+      <div class="palette-grid">
+        ${palettes.map((p,i)=>`
+          <div style="text-align:center">
+            <div class="palette" onclick="document.querySelectorAll('.palette').forEach(el=>el.classList.remove('active'));this.classList.add('active')"
+              style="background:linear-gradient(135deg,${p.colors[0]},${p.colors[1]});${i===0?'border-color:var(--blue)':''}" title="${p.label}"></div>
+            <div style="font-size:10px;color:var(--text2);margin-top:4px">${p.label}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// =======================================
+// 競合分析
+// =======================================
+function renderCompetitor() {
+  const idx   = parseInt(document.getElementById('comp-niche').value);
+  const comps = COMPETITORS[idx] || COMPETITORS[0];
+
+  // KPI
+  const avgBsr   = Math.round(comps.reduce((a,b)=>a+b.bsr,0)/comps.length);
+  const avgStars = (comps.reduce((a,b)=>a+b.stars,0)/comps.length).toFixed(1);
+  const kuRate   = Math.round(comps.filter(c=>c.ku).length/comps.length*100);
+  const avgPages = Math.round(comps.reduce((a,b)=>a+b.pages,0)/comps.length);
+
+  document.getElementById('comp-kpi').innerHTML = [
+    {label:'競合書籍数',   value:`${comps.length}冊`},
+    {label:'平均BSR',      value:avgBsr.toLocaleString()},
+    {label:'平均★評価',   value:`${avgStars} / 5`},
+    {label:'KU対応率',     value:`${kuRate}%`},
+    {label:'平均ページ数', value:`${avgPages}p`},
+  ].map(c=>`<div class="comp-kpi-card"><div class="comp-kpi-label">${c.label}</div><div class="comp-kpi-value">${c.value}</div></div>`).join('');
+
+  // 表
+  const bsrCls = bsr=>bsr<=3000?'bsr-green':bsr<=6000?'bsr-yellow':'bsr-gray';
+  const rows = comps.map((c,i)=>{
+    const missingHtml = (c.missing||[]).map(m=>`<span class="missing-tag">${m}</span>`).join('');
+    const kwHtml = (c.kw||[]).map(k=>`<span style="font-size:10px;color:var(--purple)">${k.w}<span style="color:var(--text2)"> ${(k.v/1000).toFixed(0)}K</span></span>`).join('<br>');
+    const sent = c.sentiment||{pos:70,neg:30};
+    const sentHtml = `<div class="sent-bar"><div class="sent-pos" style="width:${sent.pos}%"></div><div class="sent-neg" style="width:${sent.neg}%"></div></div><div style="font-size:10px;color:var(--text2)">${sent.pos}% / ${sent.neg}%</div>`;
+    const kuHtml = c.ku?'<span class="ku-badge">KU</span>':'';
+    const titleLink = `<a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(c.title)}&i=digital-text" target="_blank" rel="noopener" style="color:var(--blue)">${c.title} <span style="font-size:10px">↗</span></a>`;
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${titleLink}</td>
+      <td>¥${c.price}</td>
+      <td class="${bsrCls(c.bsr)}">${c.bsr.toLocaleString()}</td>
+      <td>⭐${c.stars}</td>
+      <td>${c.reviews}</td>
+      <td style="color:var(--green)">¥${(c.revenue/10000).toFixed(0)}万</td>
+      <td>${c.pages}p</td>
+      <td style="color:var(--text2)">${c.date}</td>
+      <td>${kuHtml}</td>
+      <td>${kwHtml||'—'}</td>
+      <td>${sentHtml}</td>
+      <td>${missingHtml}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('comp-tbody').innerHTML = rows;
+
+  // チャート（毎回再描画）
+  ['chart-comp-bubble','chart-comp-scatter','chart-comp-sentiment','chart-comp-kw'].forEach(id=>{
+    if(window['_chart_'+id]) window['_chart_'+id].destroy();
+  });
+
+  window['_chart_chart-comp-bubble'] = new Chart(document.getElementById('chart-comp-bubble'),{
+    type:'bubble',
+    data:{datasets:[
+      {label:'KUあり',data:comps.filter(c=>c.ku).map(c=>({x:c.reviews,y:c.bsr,r:Math.sqrt(c.revenue/8000),title:c.title})),backgroundColor:'#bc8cff80'},
+      {label:'KUなし',data:comps.filter(c=>!c.ku).map(c=>({x:c.reviews,y:c.bsr,r:Math.sqrt(c.revenue/8000),title:c.title})),backgroundColor:'#58a6ff80'},
+    ]},
+    options:{plugins:{tooltip:{callbacks:{label:ctx=>`${ctx.raw.title||''}: レビュー${ctx.raw.x} / BSR${ctx.raw.y}`}}},scales:{y:{reverse:true,title:{display:true,text:'BSR（低いほど売れている）'}},x:{title:{display:true,text:'レビュー数'}}}}
+  });
+
+  window['_chart_chart-comp-scatter'] = new Chart(document.getElementById('chart-comp-scatter'),{
+    type:'scatter',
+    data:{datasets:[{label:'競合書籍',data:comps.map(c=>({x:c.pages,y:c.price,label:c.title})),backgroundColor:'#3fb95080',pointRadius:8}]},
+    options:{plugins:{tooltip:{callbacks:{label:ctx=>`${ctx.raw.label}: ${ctx.raw.x}p / ¥${ctx.raw.y}`}}},scales:{x:{title:{display:true,text:'ページ数'}},y:{title:{display:true,text:'価格（円）'}}}}
+  });
+
+  const sentData = comps.filter(c=>c.sentiment);
+  window['_chart_chart-comp-sentiment'] = new Chart(document.getElementById('chart-comp-sentiment'),{
+    type:'bar',
+    data:{labels:sentData.map((_,i)=>`${i+1}位`),datasets:[
+      {label:'ポジティブ%',data:sentData.map(c=>c.sentiment.pos),backgroundColor:'#3fb95080'},
+      {label:'ネガティブ%',data:sentData.map(c=>-c.sentiment.neg),backgroundColor:'#f8514980'},
+    ]},
+    options:{indexAxis:'y',scales:{x:{stacked:true,min:-100,max:100},y:{stacked:true}},plugins:{legend:{position:'bottom'}}}
+  });
+
+  const allKws = {};
+  comps.forEach(c=>(c.kw||[]).forEach(k=>{ allKws[k.w]=(allKws[k.w]||0)+k.v; }));
+  const kwEntries = Object.entries(allKws).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  window['_chart_chart-comp-kw'] = new Chart(document.getElementById('chart-comp-kw'),{
+    type:'bar',
+    data:{labels:kwEntries.map(([k])=>k),datasets:[{label:'月間検索数',data:kwEntries.map(([,v])=>v),backgroundColor:'#bc8cff80'}]},
+    options:{indexAxis:'y',plugins:{legend:{display:false}}}
+  });
+}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
