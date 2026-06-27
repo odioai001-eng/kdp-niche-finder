@@ -298,18 +298,29 @@ tr:hover td{background:rgba(88,166,255,.04)}
         <h3 style="margin-bottom:14px;color:var(--blue)">✍️ 書籍アイデア生成</h3>
         <div class="gen-label">ニッチジャンル（JP検索分析から選択または直接入力）</div>
         <select style="width:100%;margin-bottom:6px" class="gen-select" onchange="document.getElementById('gen-niche').value=this.value;updateJpSeo()">
-          <option value="">── Kindle JP 検索ボリューム上位 ──</option>
-          <option value="更年期 対策">更年期 対策（月74,200検索 / 競合6冊）</option>
-          <option value="子なし 老後 お金">子なし 老後 お金（月21,300検索 / 競合7冊）</option>
-          <option value="睡眠 認知症 予防">睡眠 認知症 予防（月16,200検索 / 競合6冊）</option>
-          <option value="副業 AI 自動化">副業 AI 自動化（月15,100検索 / 競合8冊）</option>
-          <option value="ペット 看取り">ペット 看取り（月9,800検索 / 競合5冊）</option>
-          <option value="介護 AI">介護 AI（月8,900検索 / 競合3冊）</option>
-          <option value="腸活 更年期">腸活 更年期（月7,600検索 / 競合4冊）</option>
-          <option value="50代 FIRE">50代 FIRE（月6,800検索 / 競合5冊）</option>
-          <option value="発達障害 仕事">発達障害 仕事（月5,900検索 / 競合4冊）</option>
-          <option value="犬 ホリスティック">犬 ホリスティック（月4,200検索 / 競合6冊）</option>
-        </select>
+          <option value="">── キーワードを選択 ──</option>
+          <optgroup label="★超穴場（競合21〜34冊）">
+          <option value="発達障害 AI">発達障害 AI（競合21冊 / 穴場スコア94）</option>
+          <option value="ペット 看取り">ペット 看取り（競合34冊 / 穴場スコア88）</option>
+          <option value="更年期 漫画">更年期 漫画（競合8冊 / 穴場スコア91）</option>
+          <option value="発達障害 思春期">発達障害 思春期（競合6冊 / 穴場スコア92）</option>
+          <option value="更年期 ダイエット">更年期 ダイエット（競合6冊 / 穴場スコア90）</option>
+          </optgroup>
+          <optgroup label="穴場（競合少ない・成長中）">
+          <option value="スマホ脳">スマホ脳（競合71冊 / BSR13位の強市場）</option>
+          <option value="発達障害 女性">発達障害 女性（競合12冊 / 穴場スコア89）</option>
+          <option value="更年期 漢方">更年期 漢方（競合9冊 / 穴場スコア89）</option>
+          <option value="発達障害 マンガ">発達障害 マンガ（競合6冊 / 穴場スコア90）</option>
+          <option value="老後 一人">老後 一人（競合8冊 / BSR11,365）</option>
+          <option value="睡眠改善">睡眠改善（競合9冊 / BSR2,760）</option>
+          </optgroup>
+          <optgroup label="激戦区（需要大・強敵あり）">
+          <option value="自律神経 整える">自律神経 整える（競合280冊 / BSR4位）</option>
+          <option value="投資 初心者 本">投資 初心者 本（競合62冊 / BSR534）</option>
+          <option value="更年期 対策">更年期 対策（競合244冊 / 激戦区）</option>
+          <option value="腸活 本">腸活 本（競合454冊 / 激戦区）</option>
+          </optgroup>
+          </select>
         <input id="gen-niche" class="gen-input" placeholder="例: 介護×AI活用" oninput="updateJpSeo()" style="margin-bottom:10px">
         <div id="jp-seo-panel"></div>
         <div class="gen-row">
@@ -1023,6 +1034,7 @@ function renderCompetitor() {
 </script>
 </body>
 </html>
+
 
 
 
