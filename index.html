@@ -261,10 +261,12 @@ tr:hover td{background:rgba(88,166,255,.04)}
     </select>
     <select id="search-sort" onchange="renderSearchTable()">
       <option value="vol">月間検索数順</option>
+      <option value="ratio" selected>検索数÷出版数順（穴場度）</option>
       <option value="chance">穴場スコア順</option>
       <option value="books">競合数少ない順</option>
       <option value="revenue">平均月収順</option>
     </select>
+    <button class="tag-btn active" id="tag-blue" onclick="toggleBlue()">🎯 検索多い×出版少ないのみ</button>
     <input id="search-text" placeholder="🔍 キーワード検索..." oninput="renderSearchTable()" style="width:180px">
   </div>
   <div class="table-wrap">
@@ -274,7 +276,7 @@ tr:hover td{background:rgba(88,166,255,.04)}
           <th>#</th><th>キーワード</th><th>カテゴリ</th>
           <th>月間検索数</th><th>トレンド</th>
           <th>競合書籍数</th><th>平均BSR</th><th>平均月収</th>
-          <th>穴場スコア</th><th>シリーズ展開</th>
+          <th>穴場スコア</th><th>シリーズ展開</th><th>サジェスト</th>
         </tr>
       </thead>
       <tbody id="search-tbody"></tbody>
@@ -770,12 +772,34 @@ function initRankingCharts() {
 // =======================================
 // Kindle JP 検索分析
 // =======================================
+// サジェスト結果（data/suggest.json）との照合。キーワードの全単語を含む候補の件数と最高順位
+let SUGGEST = null;
+function suggestMatch(kw) {
+  if (!SUGGEST) return null;
+  const toks = kw.toLowerCase().split(/\s+/).filter(Boolean);
+  const hit = SUGGEST.items.filter(x => { const k = x.kw.toLowerCase(); return toks.every(w => k.includes(w)); });
+  return hit.length ? {n: hit.length, best: Math.min(...hit.map(x => x.rank))} : {n: 0, best: null};
+}
+fetch('data/suggest.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(d => {
+  if (d) { SUGGEST = d; renderSearchTable(); }
+}).catch(() => {});
+
+// 「検索は多いが出版が少ない」= 月間検索数が多く、競合書籍数が少ないキーワード
+const BLUE_MIN_VOL = 8000, BLUE_MAX_BOOKS = 30;
+let blueOnly = true;
+function toggleBlue() {
+  blueOnly = !blueOnly;
+  document.getElementById('tag-blue').classList.toggle('active', blueOnly);
+  renderSearchTable();
+}
+
 function renderSearchTable() {
   const catF  = document.getElementById('search-cat-filter').value;
   const sortV = document.getElementById('search-sort').value;
   const textF = document.getElementById('search-text').value.toLowerCase();
 
   let data = SEARCH_DATA.filter(d=>{
+    if(blueOnly && !(d.vol>=BLUE_MIN_VOL && d.books<=BLUE_MAX_BOOKS)) return false;
     if(catF && d.cat!==catF) return false;
     if(textF && !d.kw.toLowerCase().includes(textF)) return false;
     return true;
@@ -783,6 +807,7 @@ function renderSearchTable() {
 
   data.sort((a,b)=>{
     if(sortV==='vol') return b.vol-a.vol;
+    if(sortV==='ratio') return b.vol/b.books - a.vol/a.books;
     if(sortV==='chance') return b.chance-a.chance;
     if(sortV==='books') return a.books-b.books;
     if(sortV==='revenue') return b.revenue-a.revenue;
@@ -805,6 +830,7 @@ function renderSearchTable() {
     <td style="color:var(--green)">¥${(d.revenue/10000).toFixed(0)}万</td>
     <td class="${chanceCls(d.chance)}">${d.chance}点</td>
     <td>${d.series?'<span style="color:var(--green)">✓ あり</span>':'—'}</td>
+    <td>${(m=>!m?'…':m.n?`<span style="color:var(--green)">🔥 ${m.n}件</span><br><span style="color:var(--text2);font-size:11px">最高${m.best}位</span>`:'—')(suggestMatch(d.kw))}</td>
   </tr>`).join('');
 
   document.getElementById('search-tbody').innerHTML = rows;
