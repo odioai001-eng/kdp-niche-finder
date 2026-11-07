@@ -25,6 +25,10 @@ const endpoint = (prefix) =>
     limit: '10',
   });
 
+// アダルト系の候補は除外（公開ページに載せないため）
+const BLOCK = /セックス|まんこ|ちんこ|おっぱい|エロ|ヌード|無修正|モザイク|アダルト|官能|風俗|ポルノ|痴漢|ハメ|レイプ|AV女優|\bav\b|巨乳|熟女|フェラ|オナ/i;
+const isOk = (kw) => !BLOCK.test(kw);
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function suggest(prefix) {
@@ -33,7 +37,7 @@ async function suggest(prefix) {
       const res = await fetch(endpoint(prefix), { headers: { 'user-agent': 'Mozilla/5.0 (kdp-niche-finder daily job)' } });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const j = await res.json();
-      return (j.suggestions || []).map((s) => s.value).filter(Boolean);
+      return (j.suggestions || []).map((s) => s.value).filter((v) => v && isOk(v));
     } catch (e) {
       await sleep(1500 * (i + 1));
     }
