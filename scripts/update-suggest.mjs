@@ -8,7 +8,9 @@ const html = readFileSync('index.html', 'utf8');
 const seeds = new Set(['Kindle 本', 'AI 副業', 'FIRE', '睡眠', '更年期', '発達障害', 'ペット', '老後', '腸活', '投資']);
 const m = html.match(/const SEARCH_DATA = \[([\s\S]*?)\n\];/);
 if (m) for (const x of m[1].matchAll(/kw:"([^"]+)"/g)) seeds.add(x[1]);
-const suffixes = ['', ' 本', ' マンガ', ' 入門'];
+const suffixes = ['']; // キーワードそのままの入力に対するAmazonの候補だけを使う
+const TOP_PER_SEED = 5; // 各キーワードでAmazonが上位に出した候補のみ採用
+const MAX_ITEMS = 50;
 
 const endpoint = (prefix) =>
   'https://completion.amazon.co.jp/api/2017/suggestions?' +
@@ -47,7 +49,7 @@ for (const seed of seeds) {
     await sleep(400);
     if (!list) { fail++; continue; }
     ok++;
-    list.forEach((kw, idx) => {
+    list.slice(0, TOP_PER_SEED).forEach((kw, idx) => {
       const e = score.get(kw) || { kw, score: 0, hits: 0, seeds: new Set() };
       e.score += 10 - idx; // 上位表示ほど高得点
       e.hits += 1;
@@ -67,7 +69,7 @@ const prevRank = new Map(prev.items.map((x) => [x.kw, x.rank]));
 
 const items = [...score.values()]
   .sort((a, b) => b.score - a.score || b.hits - a.hits)
-  .slice(0, 100)
+  .slice(0, MAX_ITEMS)
   .map((e, i) => ({
     rank: i + 1,
     kw: e.kw,
