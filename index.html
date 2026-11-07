@@ -261,10 +261,12 @@ tr:hover td{background:rgba(88,166,255,.04)}
     </select>
     <select id="search-sort" onchange="renderSearchTable()">
       <option value="vol">月間検索数順</option>
+      <option value="ratio" selected>検索数÷出版数順（穴場度）</option>
       <option value="chance">穴場スコア順</option>
       <option value="books">競合数少ない順</option>
       <option value="revenue">平均月収順</option>
     </select>
+    <button class="tag-btn active" id="tag-blue" onclick="toggleBlue()">🎯 検索多い×出版少ないのみ</button>
     <input id="search-text" placeholder="🔍 キーワード検索..." oninput="renderSearchTable()" style="width:180px">
   </div>
   <div class="table-wrap">
@@ -782,12 +784,22 @@ fetch('data/suggest.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null)
   if (d) { SUGGEST = d; renderSearchTable(); }
 }).catch(() => {});
 
+// 「検索は多いが出版が少ない」= 月間検索数が多く、競合書籍数が少ないキーワード
+const BLUE_MIN_VOL = 8000, BLUE_MAX_BOOKS = 30;
+let blueOnly = true;
+function toggleBlue() {
+  blueOnly = !blueOnly;
+  document.getElementById('tag-blue').classList.toggle('active', blueOnly);
+  renderSearchTable();
+}
+
 function renderSearchTable() {
   const catF  = document.getElementById('search-cat-filter').value;
   const sortV = document.getElementById('search-sort').value;
   const textF = document.getElementById('search-text').value.toLowerCase();
 
   let data = SEARCH_DATA.filter(d=>{
+    if(blueOnly && !(d.vol>=BLUE_MIN_VOL && d.books<=BLUE_MAX_BOOKS)) return false;
     if(catF && d.cat!==catF) return false;
     if(textF && !d.kw.toLowerCase().includes(textF)) return false;
     return true;
@@ -795,6 +807,7 @@ function renderSearchTable() {
 
   data.sort((a,b)=>{
     if(sortV==='vol') return b.vol-a.vol;
+    if(sortV==='ratio') return b.vol/b.books - a.vol/a.books;
     if(sortV==='chance') return b.chance-a.chance;
     if(sortV==='books') return a.books-b.books;
     if(sortV==='revenue') return b.revenue-a.revenue;
