@@ -169,6 +169,7 @@ tr:hover td{background:rgba(88,166,255,.04)}
       <button class="nav-btn" onclick="showPanel('global')">🌍 海外ニッチ比較</button>
       <button class="nav-btn" onclick="showPanel('ideas')">✍️ 書籍アイデア生成</button>
       <button class="nav-btn" onclick="showPanel('comp')">🔍 競合分析</button>
+      <button class="nav-btn" onclick="showPanel('suggest')">🔥 サジェストランキング</button>
     </nav>
     <div class="last-updated" id="last-updated-txt"></div>
   </div>
@@ -234,6 +235,16 @@ tr:hover td{background:rgba(88,166,255,.04)}
 </div>
 
 <!-- ========== タブ②：Kindle JP 検索分析 ========== -->
+<div id="panel-suggest" class="panel">
+  <p style="color:var(--text2);font-size:12px;margin-bottom:10px" id="suggest-meta">読み込み中…</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>順位</th><th>前回比</th><th>キーワード</th><th>スコア</th><th>元キーワード</th></tr></thead>
+      <tbody id="suggest-body"></tbody>
+    </table>
+  </div>
+</div>
+
 <div id="panel-search" class="panel">
   <h2 style="margin-bottom:12px;color:var(--blue)">🔎 Kindle JP 検索分析 — 穴場キーワードランキング</h2>
   <p style="color:var(--text2);font-size:13px;margin-bottom:16px">
@@ -577,8 +588,29 @@ let activeFilters = {global: true, hot: false, new: false};
 // =======================================
 // 初期化
 // =======================================
+// 毎日自動更新される検索サジェストランキング（data/suggest.json）
+let suggestLoaded = false;
+async function loadSuggest() {
+  if (suggestLoaded) return;
+  const meta = document.getElementById('suggest-meta');
+  try {
+    const d = await (await fetch('data/suggest.json', {cache:'no-cache'})).json();
+    suggestLoaded = true;
+    meta.textContent = `${d.source} ／ ${d.updated} 更新（毎日自動更新）`;
+    document.getElementById('last-updated-txt').textContent = `${d.updated} 自動更新（サジェスト）`;
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    document.getElementById('suggest-body').innerHTML = d.items.map(x => {
+      const diff = x.prev == null ? '🆕 NEW' : x.prev > x.rank ? `▲${x.prev - x.rank}` : x.prev < x.rank ? `▼${x.rank - x.prev}` : '―';
+      return `<tr><td>${x.rank}</td><td>${diff}</td><td>${esc(x.kw)}</td><td>${x.score}</td><td>${x.seeds.map(esc).join('、')}</td></tr>`;
+    }).join('');
+  } catch (e) {
+    meta.textContent = 'まだデータがありません（初回の自動更新後に表示されます）';
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('last-updated-txt').textContent = lastUpdated;
+  fetch('data/suggest.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(d=>{ if(d) document.getElementById('last-updated-txt').textContent = `${d.updated} 自動更新（サジェスト）`; }).catch(()=>{});
   initTicker();
   renderKPIs();
   renderRanking();
@@ -604,11 +636,12 @@ function showPanel(name) {
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
-  const idx = ['ranking','search','global','ideas','comp'].indexOf(name);
+  const idx = ['ranking','search','global','ideas','comp','suggest'].indexOf(name);
   document.querySelectorAll('.nav-btn')[idx].classList.add('active');
   if(name==='search'){renderSearchTable();initSearchCharts();}
   if(name==='global'){initGlobalCharts();}
   if(name==='comp'){renderCompetitor();}
+  if(name==='suggest'){loadSuggest();}
 }
 
 // =======================================
