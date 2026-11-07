@@ -26,7 +26,7 @@ const endpoint = (prefix) =>
   });
 
 // アダルト系の候補は除外（公開ページに載せないため）
-const BLOCK = /セックス|まんこ|ちんこ|おっぱい|エロ|ヌード|無修正|モザイク|アダルト|官能|風俗|ポルノ|痴漢|ハメ|レイプ|AV女優|\bav\b|巨乳|熟女|フェラ|オナ/i;
+const BLOCK = /セックス|まんこ|ちんこ|おっぱい|エロ|ヌード|無修正|モザイク|アダルト|官能|風俗|ポルノ|痴漢|ハメ|レイプ|AV女優|\bav\b|巨乳|熟女|フェラ|オナ|ぬきたし|生徒会にも穴はある/i;
 const isOk = (kw) => !BLOCK.test(kw);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
