@@ -1,5 +1,5 @@
 {
- "updated": "2026年11月08日",
+ "updated": "2026年11月09日",
  "source": "Amazon.co.jp Kindleストア サジェスト",
  "requests": {
   "ok": 36,
@@ -75,287 +75,287 @@
    "kw": "世界史",
    "pos": 1,
    "from": "せ",
-   "prev": null
+   "prev": 10
   },
   {
    "rank": 11,
    "kw": "葬送のフリーレン",
    "pos": 1,
    "from": "そ",
-   "prev": 10
+   "prev": 11
   },
   {
    "rank": 12,
    "kw": "橘玲",
    "pos": 1,
    "from": "た",
-   "prev": 11
+   "prev": 12
   },
   {
    "rank": 13,
    "kw": "辻村深月",
    "pos": 1,
    "from": "つ",
-   "prev": 12
+   "prev": 13
   },
   {
    "rank": 14,
    "kw": "転生した大聖女は 聖女であることをひた隠す",
    "pos": 1,
    "from": "て",
-   "prev": 13
+   "prev": 14
   },
   {
    "rank": 15,
    "kw": "日本史",
    "pos": 1,
    "from": "に",
-   "prev": 14
+   "prev": 15
   },
   {
    "rank": 16,
    "kw": "貫井徳郎",
    "pos": 1,
    "from": "ぬ",
-   "prev": null
+   "prev": 16
   },
   {
    "rank": 17,
    "kw": "猫",
    "pos": 1,
    "from": "ね",
-   "prev": 15
+   "prev": 17
   },
   {
    "rank": 18,
    "kw": "のいちごジュニア文庫",
    "pos": 1,
    "from": "の",
-   "prev": 16
+   "prev": 18
   },
   {
    "rank": 19,
    "kw": "原田マハ",
    "pos": 1,
    "from": "は",
-   "prev": 17
+   "prev": 19
   },
   {
    "rank": 20,
    "kw": "変な家",
    "pos": 1,
    "from": "へ",
-   "prev": 18
+   "prev": 20
   },
   {
    "rank": 21,
    "kw": "本好きの下剋上",
    "pos": 1,
    "from": "ほ",
-   "prev": 19
+   "prev": 21
   },
   {
    "rank": 22,
    "kw": "漫画",
    "pos": 1,
    "from": "ま",
-   "prev": 20
+   "prev": 22
   },
   {
    "rank": 23,
    "kw": "ミステリー",
    "pos": 1,
    "from": "み",
-   "prev": 21
+   "prev": 23
   },
   {
    "rank": 24,
    "kw": "メイドインアビス",
    "pos": 1,
    "from": "め",
-   "prev": 22
+   "prev": 24
   },
   {
    "rank": 25,
    "kw": "森博嗣",
    "pos": 1,
    "from": "も",
-   "prev": 23
+   "prev": 25
   },
   {
    "rank": 26,
    "kw": "ヤングジャンプ",
    "pos": 1,
    "from": "や",
-   "prev": 24
+   "prev": 26
   },
   {
    "rank": 27,
    "kw": "ゆるキャン",
    "pos": 1,
    "from": "ゆ",
-   "prev": 25
+   "prev": 27
   },
   {
    "rank": 28,
    "kw": "ライトノベル",
    "pos": 1,
    "from": "ら",
-   "prev": 26
+   "prev": 28
   },
   {
    "rank": 29,
    "kw": "るるぶ",
    "pos": 1,
    "from": "る",
-   "prev": 27
+   "prev": 29
   },
   {
    "rank": 30,
    "kw": "レシピ",
    "pos": 1,
    "from": "れ",
-   "prev": 28
+   "prev": 30
   },
   {
    "rank": 31,
    "kw": "ロメリア戦記",
    "pos": 1,
    "from": "ろ",
-   "prev": 29
+   "prev": 31
   },
   {
    "rank": 32,
    "kw": "ai",
    "pos": 1,
    "from": "a",
-   "prev": 30
+   "prev": 32
   },
   {
    "rank": 33,
    "kw": "bl",
    "pos": 1,
    "from": "b",
-   "prev": 31
+   "prev": 33
   },
   {
    "rank": 34,
    "kw": "ちいかわ",
    "pos": 1,
    "from": "c",
-   "prev": 32
+   "prev": 34
   },
   {
    "rank": 35,
    "kw": "ドラゴンボール",
    "pos": 1,
    "from": "d",
-   "prev": 33
+   "prev": 35
   },
   {
    "rank": 36,
    "kw": "英語",
    "pos": 1,
    "from": "e",
-   "prev": 34
+   "prev": 36
   },
   {
    "rank": 37,
    "kw": "フランス書院",
    "pos": 1,
    "from": "f",
-   "prev": 35
+   "prev": 37
   },
   {
    "rank": 38,
    "kw": "グラビア",
    "pos": 1,
    "from": "g",
-   "prev": 36
+   "prev": 38
   },
   {
    "rank": 39,
    "kw": "東野東吾",
    "pos": 1,
    "from": "h",
-   "prev": 37
+   "prev": 39
   },
   {
    "rank": 40,
    "kw": "伊坂幸太郎",
    "pos": 1,
    "from": "i",
-   "prev": 38
+   "prev": 40
   },
   {
    "rank": 41,
    "kw": "十二国記",
    "pos": 1,
    "from": "j",
-   "prev": 39
+   "prev": 41
   },
   {
    "rank": 42,
    "kw": "ldk",
    "pos": 1,
    "from": "l",
-   "prev": 40
+   "prev": 42
   },
   {
    "rank": 43,
    "kw": "無料",
    "pos": 1,
    "from": "m",
-   "prev": 41
+   "prev": 43
   },
   {
    "rank": 44,
    "kw": "汝 星のごとく",
    "pos": 1,
    "from": "n",
-   "prev": 42
+   "prev": 44
   },
   {
    "rank": 45,
    "kw": "忍空",
    "pos": 1,
    "from": "o",
-   "prev": 43
+   "prev": 45
   },
   {
    "rank": 46,
    "kw": "prime reading",
    "pos": 1,
    "from": "p",
-   "prev": 44
+   "prev": 46
   },
   {
    "rank": 47,
    "kw": "qed",
    "pos": 1,
    "from": "q",
-   "prev": 45
+   "prev": 47
   },
   {
    "rank": 48,
    "kw": "料理",
    "pos": 1,
    "from": "r",
-   "prev": 46
+   "prev": 48
   },
   {
    "rank": 49,
    "kw": "小説",
    "pos": 1,
    "from": "s",
-   "prev": 47
+   "prev": 49
   },
   {
    "rank": 50,
    "kw": "東野圭吾",
    "pos": 1,
    "from": "t",
-   "prev": 48
+   "prev": 50
   }
  ],
  "items": [
