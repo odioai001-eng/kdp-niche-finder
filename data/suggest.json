@@ -1,5 +1,5 @@
 {
- "updated": "2026年11月12日",
+ "updated": "2026年11月13日",
  "source": "Amazon.co.jp Kindleストア サジェスト",
  "requests": {
   "ok": 36,
@@ -19,7 +19,7 @@
    "kw": "宇野千代",
    "pos": 1,
    "from": "う",
-   "prev": null
+   "prev": 2
   },
   {
    "rank": 3,
@@ -54,7 +54,7 @@
    "kw": "コミック",
    "pos": 1,
    "from": "こ",
-   "prev": null
+   "prev": 7
   },
   {
    "rank": 8,
@@ -96,32 +96,32 @@
    "kw": "辻村深月",
    "pos": 1,
    "from": "つ",
-   "prev": 14
+   "prev": 13
   },
   {
    "rank": 14,
    "kw": "哲学",
    "pos": 1,
    "from": "て",
-   "prev": 15
+   "prev": 14
   },
   {
    "rank": 15,
    "kw": "日本史",
    "pos": 1,
    "from": "に",
-   "prev": 16
+   "prev": 15
   },
   {
    "rank": 16,
    "kw": "貫井徳郎",
    "pos": 1,
    "from": "ぬ",
-   "prev": 17
+   "prev": 16
   },
   {
    "rank": 17,
-   "kw": "眠れなくなるほど面白い",
+   "kw": "寝取られ",
    "pos": 1,
    "from": "ね",
    "prev": null
@@ -131,144 +131,144 @@
    "kw": "のいちごジュニア文庫",
    "pos": 1,
    "from": "の",
-   "prev": 19
+   "prev": 18
   },
   {
    "rank": 19,
    "kw": "ハリーポッター",
    "pos": 1,
    "from": "は",
-   "prev": 20
+   "prev": 19
   },
   {
    "rank": 20,
    "kw": "変な家",
    "pos": 1,
    "from": "へ",
-   "prev": 21
+   "prev": 20
   },
   {
    "rank": 21,
    "kw": "星新一",
    "pos": 1,
    "from": "ほ",
-   "prev": 22
+   "prev": 21
   },
   {
    "rank": 22,
    "kw": "漫画",
    "pos": 1,
    "from": "ま",
-   "prev": 23
+   "prev": 22
   },
   {
    "rank": 23,
    "kw": "宮部みゆき",
    "pos": 1,
    "from": "み",
-   "prev": 24
+   "prev": 23
   },
   {
    "rank": 24,
    "kw": "メイドインアビス",
    "pos": 1,
    "from": "め",
-   "prev": 25
+   "prev": 24
   },
   {
    "rank": 25,
-   "kw": "森博嗣",
+   "kw": "諸星大二郎",
    "pos": 1,
    "from": "も",
-   "prev": 26
+   "prev": null
   },
   {
    "rank": 26,
    "kw": "ヤングジャンプ",
    "pos": 1,
    "from": "や",
-   "prev": 27
+   "prev": 26
   },
   {
    "rank": 27,
    "kw": "ゆるキャン",
    "pos": 1,
    "from": "ゆ",
-   "prev": 28
+   "prev": 27
   },
   {
    "rank": 28,
    "kw": "ライトノベル",
    "pos": 1,
    "from": "ら",
-   "prev": 29
+   "prev": 28
   },
   {
    "rank": 29,
    "kw": "るるぶ",
    "pos": 1,
    "from": "る",
-   "prev": 30
+   "prev": 29
   },
   {
    "rank": 30,
    "kw": "レシピ",
    "pos": 1,
    "from": "れ",
-   "prev": 31
+   "prev": 30
   },
   {
    "rank": 31,
    "kw": "ロメリア戦記",
    "pos": 1,
    "from": "ろ",
-   "prev": 32
+   "prev": 31
   },
   {
    "rank": 32,
    "kw": "ai",
    "pos": 1,
    "from": "a",
-   "prev": 34
+   "prev": 32
   },
   {
    "rank": 33,
    "kw": "bl",
    "pos": 1,
    "from": "b",
-   "prev": 35
+   "prev": 33
   },
   {
    "rank": 34,
    "kw": "ちばてつや",
    "pos": 1,
    "from": "c",
-   "prev": 36
+   "prev": 34
   },
   {
    "rank": 35,
    "kw": "ダイエット",
    "pos": 1,
    "from": "d",
-   "prev": 37
+   "prev": 35
   },
   {
    "rank": 36,
    "kw": "英語",
    "pos": 1,
    "from": "e",
-   "prev": 38
+   "prev": 36
   },
   {
    "rank": 37,
    "kw": "フランス書院",
    "pos": 1,
    "from": "f",
-   "prev": 39
+   "prev": 37
   },
   {
    "rank": 38,
-   "kw": "ガンニバル",
+   "kw": "グラビア",
    "pos": 1,
    "from": "g",
    "prev": null
@@ -278,39 +278,39 @@
    "kw": "東野東吾",
    "pos": 1,
    "from": "h",
-   "prev": 41
+   "prev": 39
   },
   {
    "rank": 40,
    "kw": "伊坂幸太郎",
    "pos": 1,
    "from": "i",
-   "prev": 42
+   "prev": 40
   },
   {
    "rank": 41,
    "kw": "十二国記",
    "pos": 1,
    "from": "j",
-   "prev": 43
+   "prev": 41
   },
   {
    "rank": 42,
    "kw": "kindle",
    "pos": 1,
    "from": "k",
-   "prev": null
+   "prev": 42
   },
   {
    "rank": 43,
    "kw": "ldk",
    "pos": 1,
    "from": "l",
-   "prev": 44
+   "prev": 43
   },
   {
    "rank": 44,
-   "kw": "村上龍",
+   "kw": "無料",
    "pos": 1,
    "from": "m",
    "prev": null
@@ -320,42 +320,42 @@
    "kw": "汝 星のごとく",
    "pos": 1,
    "from": "n",
-   "prev": 46
+   "prev": 45
   },
   {
    "rank": 46,
    "kw": "お金",
    "pos": 1,
    "from": "o",
-   "prev": 47
+   "prev": 46
   },
   {
    "rank": 47,
    "kw": "prime reading",
    "pos": 1,
    "from": "p",
-   "prev": 48
+   "prev": 47
   },
   {
    "rank": 48,
    "kw": "qc検定",
    "pos": 1,
    "from": "q",
-   "prev": 49
+   "prev": 48
   },
   {
    "rank": 49,
    "kw": "料理",
    "pos": 1,
    "from": "r",
-   "prev": 50
+   "prev": 49
   },
   {
    "rank": 50,
    "kw": "小説",
    "pos": 1,
    "from": "s",
-   "prev": null
+   "prev": 50
   }
  ],
  "items": [
@@ -368,7 +368,7 @@
     "更年期",
     "更年期 ダイエット"
    ],
-   "prev": 15
+   "prev": 1
   },
   {
    "rank": 2,
@@ -379,7 +379,7 @@
     "発達障害",
     "発達障害 仕事"
    ],
-   "prev": 1
+   "prev": 2
   },
   {
    "rank": 3,
@@ -389,7 +389,7 @@
    "seeds": [
     "Kindle 本"
    ],
-   "prev": 2
+   "prev": 3
   },
   {
    "rank": 4,
@@ -399,7 +399,7 @@
    "seeds": [
     "AI 副業"
    ],
-   "prev": 3
+   "prev": 4
   },
   {
    "rank": 5,
@@ -409,7 +409,7 @@
    "seeds": [
     "FIRE"
    ],
-   "prev": 4
+   "prev": 5
   },
   {
    "rank": 6,
@@ -419,7 +419,7 @@
    "seeds": [
     "睡眠"
    ],
-   "prev": 5
+   "prev": 6
   },
   {
    "rank": 7,
@@ -429,7 +429,7 @@
    "seeds": [
     "更年期"
    ],
-   "prev": 6
+   "prev": 7
   },
   {
    "rank": 8,
@@ -439,7 +439,7 @@
    "seeds": [
     "発達障害"
    ],
-   "prev": 7
+   "prev": 8
   },
   {
    "rank": 9,
@@ -449,7 +449,7 @@
    "seeds": [
     "ペット"
    ],
-   "prev": 8
+   "prev": 9
   },
   {
    "rank": 10,
@@ -459,7 +459,7 @@
    "seeds": [
     "老後"
    ],
-   "prev": 9
+   "prev": 10
   },
   {
    "rank": 11,
@@ -469,7 +469,7 @@
    "seeds": [
     "腸活"
    ],
-   "prev": 10
+   "prev": 11
   },
   {
    "rank": 12,
@@ -479,40 +479,50 @@
    "seeds": [
     "投資"
    ],
-   "prev": 11
+   "prev": 12
   },
   {
    "rank": 13,
-   "kw": "発達障害 愛着障害",
+   "kw": "発達障害 ai 仕事術",
    "score": 10,
    "hits": 1,
    "seeds": [
     "発達障害 AI"
    ],
-   "prev": 12
+   "prev": null
   },
   {
    "rank": 14,
+   "kw": "ペット 看取り",
+   "score": 10,
+   "hits": 1,
+   "seeds": [
+    "ペット 看取り"
+   ],
+   "prev": null
+  },
+  {
+   "rank": 15,
    "kw": "更年期 漫画",
    "score": 10,
    "hits": 1,
    "seeds": [
     "更年期 漫画"
    ],
-   "prev": 13
+   "prev": 14
   },
   {
-   "rank": 15,
-   "kw": "発達障害 思春期 女の子",
+   "rank": 16,
+   "kw": "発達障害 思春期からのライフスキル",
    "score": 10,
    "hits": 1,
    "seeds": [
     "発達障害 思春期"
    ],
-   "prev": 14
+   "prev": null
   },
   {
-   "rank": 16,
+   "rank": 17,
    "kw": "スマホ脳",
    "score": 10,
    "hits": 1,
@@ -522,17 +532,17 @@
    "prev": 16
   },
   {
-   "rank": 17,
-   "kw": "発達障害 女性 なちゅ",
+   "rank": 18,
+   "kw": "発達障害 女性",
    "score": 10,
    "hits": 1,
    "seeds": [
     "発達障害 女性"
    ],
-   "prev": 17
+   "prev": null
   },
   {
-   "rank": 18,
+   "rank": 19,
    "kw": "更年期 漢方 ホットフラッシュ",
    "score": 10,
    "hits": 1,
@@ -542,8 +552,8 @@
    "prev": 18
   },
   {
-   "rank": 19,
-   "kw": "発達障害 マンガ",
+   "rank": 20,
+   "kw": "発達障害 マンガでわかる",
    "score": 10,
    "hits": 1,
    "seeds": [
@@ -552,8 +562,8 @@
    "prev": null
   },
   {
-   "rank": 20,
-   "kw": "発達障害 グレーゾーン幼児のことばを引き出す遊び53",
+   "rank": 21,
+   "kw": "発達障害 グレーゾーンの子がグーンと伸びた 声かけ 接し方大全",
    "score": 10,
    "hits": 1,
    "seeds": [
@@ -562,7 +572,7 @@
    "prev": null
   },
   {
-   "rank": 21,
+   "rank": 22,
    "kw": "老後 一人暮らし",
    "score": 10,
    "hits": 1,
@@ -572,38 +582,38 @@
    "prev": 21
   },
   {
-   "rank": 22,
-   "kw": "睡眠改善薬 ギフト",
+   "rank": 23,
+   "kw": "睡眠改善 gaba",
    "score": 10,
    "hits": 1,
    "seeds": [
     "睡眠改善"
    ],
-   "prev": 22
+   "prev": null
   },
   {
-   "rank": 23,
+   "rank": 24,
    "kw": "ai活用 仕事",
    "score": 10,
    "hits": 1,
    "seeds": [
     "AI活用 仕事"
    ],
-   "prev": null
+   "prev": 23
   },
   {
-   "rank": 24,
+   "rank": 25,
    "kw": "副業 ai",
    "score": 10,
    "hits": 1,
    "seeds": [
     "副業 AI"
    ],
-   "prev": 23
+   "prev": 24
   },
   {
-   "rank": 25,
-   "kw": "子育て 本",
+   "rank": 26,
+   "kw": "子育て 本 佐々木",
    "score": 10,
    "hits": 1,
    "seeds": [
@@ -612,252 +622,242 @@
    "prev": null
   },
   {
-   "rank": 26,
-   "kw": "自律神経 整える グッズ",
+   "rank": 27,
+   "kw": "自律神経 整える 香り",
    "score": 10,
    "hits": 1,
    "seeds": [
     "自律神経 整える"
    ],
-   "prev": 25
+   "prev": null
   },
   {
-   "rank": 27,
-   "kw": "投資 初心者 本 ランキング",
+   "rank": 28,
+   "kw": "投資 初心者 本",
    "score": 10,
    "hits": 1,
    "seeds": [
     "投資 初心者 本"
    ],
-   "prev": 26
+   "prev": null
   },
   {
-   "rank": 28,
-   "kw": "習慣 本 ベストセラー",
+   "rank": 29,
+   "kw": "習慣 本 ランキング",
    "score": 10,
    "hits": 1,
    "seeds": [
     "習慣 本"
    ],
-   "prev": 27
+   "prev": null
   },
   {
-   "rank": 29,
-   "kw": "腸活 本 八木",
+   "rank": 30,
+   "kw": "腸活 本 ダイレクト出版",
    "score": 10,
    "hits": 1,
    "seeds": [
     "腸活 本"
    ],
-   "prev": 28
+   "prev": null
   },
   {
-   "rank": 30,
+   "rank": 31,
    "kw": "更年期対策",
    "score": 10,
    "hits": 1,
    "seeds": [
     "更年期 対策"
    ],
-   "prev": 29
+   "prev": 30
   },
   {
-   "rank": 31,
+   "rank": 32,
    "kw": "自律神経 マンガ",
    "score": 10,
    "hits": 1,
    "seeds": [
     "自律神経 マンガ"
    ],
-   "prev": 30
+   "prev": 31
   },
   {
-   "rank": 32,
+   "rank": 33,
    "kw": "億り人 マサニー",
    "score": 10,
    "hits": 1,
    "seeds": [
     "億り人 マサニー"
    ],
-   "prev": 31
+   "prev": 32
   },
   {
-   "rank": 33,
+   "rank": 34,
    "kw": "億り人",
    "score": 10,
    "hits": 1,
    "seeds": [
     "億り人"
    ],
-   "prev": 32
+   "prev": 33
   },
   {
-   "rank": 34,
+   "rank": 35,
    "kw": "kindle 本体 セール",
    "score": 9,
    "hits": 1,
    "seeds": [
     "Kindle 本"
    ],
-   "prev": 33
+   "prev": 34
   },
   {
-   "rank": 35,
+   "rank": 36,
    "kw": "fire hd11",
    "score": 9,
    "hits": 1,
    "seeds": [
     "FIRE"
    ],
-   "prev": 34
+   "prev": 35
   },
   {
-   "rank": 36,
+   "rank": 37,
    "kw": "睡眠の正解",
    "score": 9,
    "hits": 1,
    "seeds": [
     "睡眠"
    ],
-   "prev": 35
+   "prev": 36
   },
   {
-   "rank": 37,
+   "rank": 38,
    "kw": "更年期 マンガ",
    "score": 9,
    "hits": 1,
    "seeds": [
     "更年期"
    ],
-   "prev": 44
+   "prev": 37
   },
   {
-   "rank": 38,
+   "rank": 39,
    "kw": "発達障害グレーゾーン",
    "score": 9,
    "hits": 1,
    "seeds": [
     "発達障害"
    ],
-   "prev": 37
+   "prev": 38
   },
   {
-   "rank": 39,
-   "kw": "ペットロス",
+   "rank": 40,
+   "kw": "ペットキャリーカート",
    "score": 9,
    "hits": 1,
    "seeds": [
     "ペット"
    ],
-   "prev": 38
+   "prev": null
   },
   {
-   "rank": 40,
+   "rank": 41,
    "kw": "老後に備えて異世界で8万枚の金貨を貯めます",
    "score": 9,
    "hits": 1,
    "seeds": [
     "老後"
    ],
-   "prev": 39
+   "prev": 40
   },
   {
-   "rank": 41,
+   "rank": 42,
    "kw": "投資信託",
    "score": 9,
    "hits": 1,
    "seeds": [
     "投資"
    ],
-   "prev": 40
+   "prev": 41
   },
   {
-   "rank": 42,
+   "rank": 43,
    "kw": "kindle 本体",
    "score": 8,
    "hits": 1,
    "seeds": [
     "Kindle 本"
    ],
-   "prev": 41
+   "prev": 42
   },
   {
-   "rank": 43,
-   "kw": "fire 本",
+   "rank": 44,
+   "kw": "firefly wedding",
    "score": 8,
    "hits": 1,
    "seeds": [
     "FIRE"
    ],
-   "prev": 42
+   "prev": null
   },
   {
-   "rank": 44,
+   "rank": 45,
    "kw": "睡眠の超基本",
    "score": 8,
    "hits": 1,
    "seeds": [
     "睡眠"
    ],
-   "prev": 43
+   "prev": 44
   },
   {
-   "rank": 45,
+   "rank": 46,
    "kw": "更年期 女性",
    "score": 8,
    "hits": 1,
    "seeds": [
     "更年期"
    ],
-   "prev": 36
+   "prev": 45
   },
   {
-   "rank": 46,
+   "rank": 47,
    "kw": "発達障害 金",
    "score": 8,
    "hits": 1,
    "seeds": [
     "発達障害"
    ],
-   "prev": 45
+   "prev": 46
   },
   {
-   "rank": 47,
-   "kw": "ペットセメタリー kindle",
+   "rank": 48,
+   "kw": "ペットロス",
    "score": 8,
    "hits": 1,
    "seeds": [
     "ペット"
    ],
-   "prev": 46
+   "prev": 39
   },
   {
-   "rank": 48,
+   "rank": 49,
    "kw": "老後破産の女王",
    "score": 8,
    "hits": 1,
    "seeds": [
     "老後"
    ],
-   "prev": 47
+   "prev": 48
   },
   {
-   "rank": 49,
+   "rank": 50,
    "kw": "投資の教科書",
    "score": 8,
    "hits": 1,
    "seeds": [
     "投資"
-   ],
-   "prev": null
-  },
-  {
-   "rank": 50,
-   "kw": "firebase",
-   "score": 7,
-   "hits": 1,
-   "seeds": [
-    "FIRE"
    ],
    "prev": 49
   }
