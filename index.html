@@ -278,6 +278,7 @@ tr:hover td{background:rgba(88,166,255,.04)}
     <button class="tag-btn active" id="tag-blue" onclick="toggleBlue()">🎯 検索多い×出版少ないのみ</button>
     <input id="search-text" placeholder="🔍 キーワード検索..." oninput="renderSearchTable()" style="width:180px">
   </div>
+  <p id="books-note" style="color:var(--text2);font-size:12px;margin-bottom:8px"></p>
   <div class="table-wrap">
     <table>
       <thead>
@@ -285,7 +286,7 @@ tr:hover td{background:rgba(88,166,255,.04)}
           <th>#</th><th>キーワード</th><th>カテゴリ</th>
           <th>月間検索数</th><th>トレンド</th>
           <th>競合書籍数</th><th>平均BSR</th><th>平均月収</th>
-          <th>穴場スコア</th><th>シリーズ展開</th><th>サジェスト</th>
+          <th>穴場スコア</th><th>シリーズ展開</th><th>サジェスト</th><th>出版数(自動)</th>
         </tr>
       </thead>
       <tbody id="search-tbody"></tbody>
@@ -787,6 +788,10 @@ function initRankingCharts() {
 // =======================================
 // サジェスト結果（data/suggest.json）との照合。キーワードの全単語を含む候補の件数と最高順位
 let SUGGEST = null;
+let BOOKS = null; // data/books.json（Kindleストアの検索結果件数。毎日自動更新）
+fetch('data/books.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : null).then(d => {
+  if (d) { BOOKS = d; renderSearchTable(); }
+}).catch(() => {});
 function suggestMatch(kw) {
   if (!SUGGEST) return null;
   const toks = kw.toLowerCase().split(/\s+/).filter(Boolean);
@@ -844,9 +849,12 @@ function renderSearchTable() {
     <td class="${chanceCls(d.chance)}">${d.chance}点</td>
     <td>${d.series?'<span style="color:var(--green)">✓ あり</span>':'—'}</td>
     <td>${(m=>!m?'…':m.n?`<span style="color:var(--green)">🔥 ${m.n}件</span><br><span style="color:var(--text2);font-size:11px">最高${m.best}位</span>`:'—')(suggestMatch(d.kw))}</td>
+    <td>${(b=>!BOOKS?'…':b?`${b.count.toLocaleString()}${b.atLeast?'+':''}件`:'—')(BOOKS&&BOOKS.items[d.kw])}</td>
   </tr>`).join('');
 
   document.getElementById('search-tbody').innerHTML = rows;
+  const note = document.getElementById('books-note');
+  if (note && BOOKS) note.textContent = `「出版数(自動)」= Amazon.co.jp Kindleストアの検索結果件数（${BOOKS.updated} 取得・毎日自動更新）。関連書籍も含むため、左の「競合書籍数」（手動）とは数え方が異なります。`;
 }
 
 let _searchChartsInit = false;
