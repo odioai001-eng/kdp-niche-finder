@@ -13,7 +13,11 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 // 「1-16件/1,000件以上の検索結果」「432件の検索結果」などから件数を取り出す
 function parseCount(body) {
   const t = body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-  let r = t.match(/([\d,]+)\s*件以上の(?:検索)?結果/);
+  // 実際の表記: 「検索結果 40 のうち 1-16件 "キーワード"」「検索結果 1,000 以上 のうち 1-16件」
+  if (/の結果は見つかりませんでした/.test(t)) return { count: 0, atLeast: false }; // 完全一致なし（関連商品のみ表示）
+  let r = t.match(/検索結果\s*([\d,]+)\s*(以上)?\s*のうち/);
+  if (r) return { count: +r[1].replace(/,/g, ''), atLeast: !!r[2] };
+  r = t.match(/([\d,]+)\s*件以上の(?:検索)?結果/);
   if (r) return { count: +r[1].replace(/,/g, ''), atLeast: true };
   r = t.match(/([\d,]+)\s*件の(?:検索)?結果/);
   if (r) return { count: +r[1].replace(/,/g, ''), atLeast: false };
