@@ -1,5 +1,5 @@
 {
- "updated": "2026年11月14日",
+ "updated": "2026年11月15日",
  "source": "Amazon.co.jp Kindleストア サジェスト",
  "requests": {
   "ok": 36,
@@ -166,7 +166,7 @@
    "kw": "ミステリー",
    "pos": 1,
    "from": "み",
-   "prev": null
+   "prev": 23
   },
   {
    "rank": 24,
@@ -341,7 +341,7 @@
    "kw": "qc検定 3級",
    "pos": 1,
    "from": "q",
-   "prev": null
+   "prev": 48
   },
   {
    "rank": 49,
@@ -368,7 +368,7 @@
     "発達障害",
     "発達障害 仕事"
    ],
-   "prev": 2
+   "prev": 1
   },
   {
    "rank": 2,
@@ -379,7 +379,7 @@
     "更年期",
     "更年期 ダイエット"
    ],
-   "prev": 1
+   "prev": 2
   },
   {
    "rank": 3,
@@ -483,13 +483,13 @@
   },
   {
    "rank": 13,
-   "kw": "発達障害 ai 仕事術",
+   "kw": "発達障害 愛着障害",
    "score": 10,
    "hits": 1,
    "seeds": [
     "発達障害 AI"
    ],
-   "prev": 13
+   "prev": null
   },
   {
    "rank": 14,
@@ -549,17 +549,17 @@
    "seeds": [
     "更年期 漢方"
    ],
-   "prev": null
+   "prev": 19
   },
   {
    "rank": 20,
-   "kw": "発達障害 マンガでわかる",
+   "kw": "発達障害 マンガ",
    "score": 10,
    "hits": 1,
    "seeds": [
     "発達障害 マンガ"
    ],
-   "prev": 20
+   "prev": null
   },
   {
    "rank": 21,
@@ -569,7 +569,7 @@
    "seeds": [
     "発達障害 グレーゾーン"
    ],
-   "prev": null
+   "prev": 21
   },
   {
    "rank": 22,
@@ -589,7 +589,7 @@
    "seeds": [
     "睡眠改善"
    ],
-   "prev": null
+   "prev": 23
   },
   {
    "rank": 24,
@@ -619,27 +619,27 @@
    "seeds": [
     "子育て 本"
    ],
-   "prev": null
+   "prev": 26
   },
   {
    "rank": 27,
-   "kw": "自律神経 整える 香り",
+   "kw": "自律神経 整える 機械",
    "score": 10,
    "hits": 1,
    "seeds": [
     "自律神経 整える"
    ],
-   "prev": 27
+   "prev": null
   },
   {
    "rank": 28,
-   "kw": "投資 初心者 本",
+   "kw": "投資 初心者 本 ランキング",
    "score": 10,
    "hits": 1,
    "seeds": [
     "投資 初心者 本"
    ],
-   "prev": 28
+   "prev": null
   },
   {
    "rank": 29,
@@ -649,7 +649,7 @@
    "seeds": [
     "習慣 本"
    ],
-   "prev": null
+   "prev": 29
   },
   {
    "rank": 30,
@@ -659,7 +659,7 @@
    "seeds": [
     "腸活 本"
    ],
-   "prev": null
+   "prev": 30
   },
   {
    "rank": 31,
