@@ -32,6 +32,7 @@ async function countFor(kw) {
     if (!res.ok) return { error: 'HTTP ' + res.status };
     if (/captcha|ロボットでないこと|Robot Check/i.test(body)) return { error: 'captcha' };
     const c = parseCount(body);
+    if (!c) console.log('DEBUG body: ' + body.replace(/\s+/g, ' ').slice(0, 600));
     return c || { error: 'parse failed (len=' + body.length + ')' };
   } catch (e) {
     return { error: String(e.message || e) };
