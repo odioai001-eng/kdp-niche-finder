@@ -1,0 +1,114 @@
+{
+ "updated": "2026年11月16日",
+ "source": "Amazon.co.jp Kindleストア 検索結果件数",
+ "requests": {
+  "ok": 26,
+  "fail": 0
+ },
+ "items": {
+  "発達障害 AI": {
+   "count": 40,
+   "atLeast": false
+  },
+  "ペット 看取り": {
+   "count": 0,
+   "atLeast": false
+  },
+  "更年期 漫画": {
+   "count": 25,
+   "atLeast": false
+  },
+  "発達障害 思春期": {
+   "count": 60,
+   "atLeast": false
+  },
+  "更年期 ダイエット": {
+   "count": 145,
+   "atLeast": false
+  },
+  "スマホ脳": {
+   "count": 77,
+   "atLeast": false
+  },
+  "発達障害 女性": {
+   "count": 202,
+   "atLeast": false
+  },
+  "更年期 漢方": {
+   "count": 8,
+   "atLeast": false
+  },
+  "発達障害 マンガ": {
+   "count": 318,
+   "atLeast": false
+  },
+  "発達障害 グレーゾーン": {
+   "count": 318,
+   "atLeast": false
+  },
+  "老後 一人": {
+   "count": 2,
+   "atLeast": false
+  },
+  "発達障害 仕事": {
+   "count": 263,
+   "atLeast": false
+  },
+  "睡眠改善": {
+   "count": 425,
+   "atLeast": false
+  },
+  "AI活用 仕事": {
+   "count": 1000,
+   "atLeast": true
+  },
+  "副業 AI": {
+   "count": 371,
+   "atLeast": false
+  },
+  "子育て 本": {
+   "count": 30000,
+   "atLeast": true
+  },
+  "メンタル 強くなる": {
+   "count": 52,
+   "atLeast": false
+  },
+  "自律神経 整える": {
+   "count": 246,
+   "atLeast": false
+  },
+  "投資 初心者 本": {
+   "count": 10000,
+   "atLeast": true
+  },
+  "習慣 本": {
+   "count": 30000,
+   "atLeast": true
+  },
+  "腸活 本": {
+   "count": 136,
+   "atLeast": false
+  },
+  "更年期 対策": {
+   "count": 47,
+   "atLeast": false
+  },
+  "自律神経 マンガ": {
+   "count": 31,
+   "atLeast": false
+  },
+  "資産形成 雑誌": {
+   "count": 2,
+   "atLeast": false
+  },
+  "億り人 マサニー": {
+   "count": 3,
+   "atLeast": false
+  },
+  "億り人": {
+   "count": 163,
+   "atLeast": false
+  }
+ }
+}
