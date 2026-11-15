@@ -13,9 +13,9 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 // 「1-16件/1,000件以上の検索結果」「432件の検索結果」などから件数を取り出す
 function parseCount(body) {
   const t = body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-  let r = t.match(/([\d,]+)\s*件以上の検索結果/);
+  let r = t.match(/([\d,]+)\s*件以上の(?:検索)?結果/);
   if (r) return { count: +r[1].replace(/,/g, ''), atLeast: true };
-  r = t.match(/([\d,]+)\s*件の検索結果/);
+  r = t.match(/([\d,]+)\s*件の(?:検索)?結果/);
   if (r) return { count: +r[1].replace(/,/g, ''), atLeast: false };
   r = t.match(/\d+-\d+件\s*\/\s*([\d,]+)\s*件/);
   if (r) return { count: +r[1].replace(/,/g, ''), atLeast: false };
@@ -32,7 +32,11 @@ async function countFor(kw) {
     if (!res.ok) return { error: 'HTTP ' + res.status };
     if (/captcha|ロボットでないこと|Robot Check/i.test(body)) return { error: 'captcha' };
     const c = parseCount(body);
-    if (!c) console.log('DEBUG body: ' + body.replace(/\s+/g, ' ').slice(0, 600));
+    if (!c) {
+      const t = body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+      const ctx = [...t.matchAll(/.{0,40}(結果|results).{0,40}/g)].slice(0, 6).map((x) => x[0]);
+      console.log('DEBUG ctx: ' + JSON.stringify(ctx));
+    }
     return c || { error: 'parse failed (len=' + body.length + ')' };
   } catch (e) {
     return { error: String(e.message || e) };
