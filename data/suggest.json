@@ -1,5 +1,5 @@
 {
- "updated": "2026年11月19日",
+ "updated": "2026年11月20日",
  "source": "Amazon.co.jp Kindleストア サジェスト",
  "requests": {
   "ok": 36,
@@ -12,350 +12,350 @@
    "kw": "アイシールド21",
    "pos": 1,
    "from": "あ",
-   "prev": null
+   "prev": 1
   },
   {
    "rank": 2,
    "kw": "株",
    "pos": 1,
    "from": "か",
-   "prev": 3
+   "prev": 2
   },
   {
    "rank": 3,
    "kw": "キングダム",
    "pos": 1,
    "from": "き",
-   "prev": 4
+   "prev": 3
   },
   {
    "rank": 4,
    "kw": "薬屋のひとりごと",
    "pos": 1,
    "from": "く",
-   "prev": 5
+   "prev": 4
   },
   {
    "rank": 5,
    "kw": "ひがしの けいごkindle東野圭吾",
    "pos": 1,
    "from": "け",
-   "prev": 6
+   "prev": 5
   },
   {
    "rank": 6,
    "kw": "コミック",
    "pos": 1,
    "from": "こ",
-   "prev": 7
+   "prev": 6
   },
   {
    "rank": 7,
    "kw": "さくらももこ",
    "pos": 1,
    "from": "さ",
-   "prev": 8
+   "prev": 7
   },
   {
    "rank": 8,
    "kw": "スパイファミリー",
    "pos": 1,
    "from": "す",
-   "prev": 9
+   "prev": 8
   },
   {
    "rank": 9,
    "kw": "世界史",
    "pos": 1,
    "from": "せ",
-   "prev": 10
+   "prev": 9
   },
   {
    "rank": 10,
    "kw": "葬送のフリーレン",
    "pos": 1,
    "from": "そ",
-   "prev": 11
+   "prev": 10
   },
   {
    "rank": 11,
    "kw": "橘玲",
    "pos": 1,
    "from": "た",
-   "prev": 12
+   "prev": 11
   },
   {
    "rank": 12,
    "kw": "辻村深月",
    "pos": 1,
    "from": "つ",
-   "prev": 13
+   "prev": 12
   },
   {
    "rank": 13,
    "kw": "哲学",
    "pos": 1,
    "from": "て",
-   "prev": 14
+   "prev": 13
   },
   {
    "rank": 14,
    "kw": "日本史",
    "pos": 1,
    "from": "に",
-   "prev": 15
+   "prev": 14
   },
   {
    "rank": 15,
    "kw": "貫井徳郎",
    "pos": 1,
    "from": "ぬ",
-   "prev": 16
+   "prev": 15
   },
   {
    "rank": 16,
    "kw": "猫",
    "pos": 1,
    "from": "ね",
-   "prev": null
+   "prev": 16
   },
   {
    "rank": 17,
    "kw": "野いちごジュニア文庫",
    "pos": 1,
    "from": "の",
-   "prev": null
+   "prev": 17
   },
   {
    "rank": 18,
    "kw": "ハリーポッター",
    "pos": 1,
    "from": "は",
-   "prev": 19
+   "prev": 18
   },
   {
    "rank": 19,
    "kw": "ヘルモード",
    "pos": 1,
    "from": "へ",
-   "prev": null
+   "prev": 19
   },
   {
    "rank": 20,
    "kw": "星新一",
    "pos": 1,
    "from": "ほ",
-   "prev": 21
+   "prev": 20
   },
   {
    "rank": 21,
    "kw": "漫画",
    "pos": 1,
    "from": "ま",
-   "prev": 22
+   "prev": 21
   },
   {
    "rank": 22,
    "kw": "ミニマリスト",
    "pos": 1,
    "from": "み",
-   "prev": null
+   "prev": 22
   },
   {
    "rank": 23,
    "kw": "メイドインアビス",
    "pos": 1,
    "from": "め",
-   "prev": 24
+   "prev": 23
   },
   {
    "rank": 24,
    "kw": "諸星大二郎",
    "pos": 1,
    "from": "も",
-   "prev": 25
+   "prev": 24
   },
   {
    "rank": 25,
    "kw": "ヤングジャンプ",
    "pos": 1,
    "from": "や",
-   "prev": 26
+   "prev": 25
   },
   {
    "rank": 26,
    "kw": "ゆるキャン",
    "pos": 1,
    "from": "ゆ",
-   "prev": 27
+   "prev": 26
   },
   {
    "rank": 27,
    "kw": "ライトノベル",
    "pos": 1,
    "from": "ら",
-   "prev": 28
+   "prev": 27
   },
   {
    "rank": 28,
    "kw": "るるぶ",
    "pos": 1,
    "from": "る",
-   "prev": 29
+   "prev": 28
   },
   {
    "rank": 29,
    "kw": "レシピ",
    "pos": 1,
    "from": "れ",
-   "prev": 30
+   "prev": 29
   },
   {
    "rank": 30,
    "kw": "ロメリア戦記",
    "pos": 1,
    "from": "ろ",
-   "prev": 31
+   "prev": 30
   },
   {
    "rank": 31,
    "kw": "ai",
    "pos": 1,
    "from": "a",
-   "prev": 32
+   "prev": 31
   },
   {
    "rank": 32,
    "kw": "bl",
    "pos": 1,
    "from": "b",
-   "prev": 33
+   "prev": 32
   },
   {
    "rank": 33,
    "kw": "ちいかわ",
    "pos": 1,
    "from": "c",
-   "prev": null
+   "prev": 33
   },
   {
    "rank": 34,
    "kw": "ダイエット",
    "pos": 1,
    "from": "d",
-   "prev": 35
+   "prev": 34
   },
   {
    "rank": 35,
    "kw": "英語",
    "pos": 1,
    "from": "e",
-   "prev": 36
+   "prev": 35
   },
   {
    "rank": 36,
    "kw": "フランス書院",
    "pos": 1,
    "from": "f",
-   "prev": 37
+   "prev": 36
   },
   {
    "rank": 37,
    "kw": "がっしゆ2",
    "pos": 1,
    "from": "g",
-   "prev": null
+   "prev": 37
   },
   {
    "rank": 38,
    "kw": "東野東吾",
    "pos": 1,
    "from": "h",
-   "prev": 39
+   "prev": 38
   },
   {
    "rank": 39,
    "kw": "池井戸潤",
    "pos": 1,
    "from": "i",
-   "prev": null
+   "prev": 39
   },
   {
    "rank": 40,
    "kw": "十二国記",
    "pos": 1,
    "from": "j",
-   "prev": 41
+   "prev": 40
   },
   {
    "rank": 41,
    "kw": "kindle",
    "pos": 1,
    "from": "k",
-   "prev": 42
+   "prev": 41
   },
   {
    "rank": 42,
    "kw": "ldk",
    "pos": 1,
    "from": "l",
-   "prev": 43
+   "prev": 42
   },
   {
    "rank": 43,
    "kw": "無料",
    "pos": 1,
    "from": "m",
-   "prev": 44
+   "prev": 43
   },
   {
    "rank": 44,
    "kw": "中山七里",
    "pos": 1,
    "from": "n",
-   "prev": null
+   "prev": 44
   },
   {
    "rank": 45,
    "kw": "お金",
    "pos": 1,
    "from": "o",
-   "prev": 46
+   "prev": 45
   },
   {
    "rank": 46,
    "kw": "prime reading",
    "pos": 1,
    "from": "p",
-   "prev": 47
+   "prev": 46
   },
   {
    "rank": 47,
    "kw": "qc検定 3級",
    "pos": 1,
    "from": "q",
-   "prev": 48
+   "prev": 47
   },
   {
    "rank": 48,
    "kw": "料理",
    "pos": 1,
    "from": "r",
-   "prev": 49
+   "prev": 48
   },
   {
    "rank": 49,
    "kw": "小説",
    "pos": 1,
    "from": "s",
-   "prev": 50
+   "prev": 49
   },
   {
    "rank": 50,
    "kw": "東野圭吾",
    "pos": 1,
    "from": "t",
-   "prev": null
+   "prev": 50
   }
  ],
  "items": [
@@ -368,7 +368,7 @@
     "更年期",
     "更年期 ダイエット"
    ],
-   "prev": 2
+   "prev": 1
   },
   {
    "rank": 2,
@@ -378,7 +378,7 @@
    "seeds": [
     "Kindle 本"
    ],
-   "prev": 3
+   "prev": 2
   },
   {
    "rank": 3,
@@ -388,7 +388,7 @@
    "seeds": [
     "AI 副業"
    ],
-   "prev": 4
+   "prev": 3
   },
   {
    "rank": 4,
@@ -398,7 +398,7 @@
    "seeds": [
     "FIRE"
    ],
-   "prev": 5
+   "prev": 4
   },
   {
    "rank": 5,
@@ -408,7 +408,7 @@
    "seeds": [
     "睡眠"
    ],
-   "prev": 6
+   "prev": 5
   },
   {
    "rank": 6,
@@ -418,7 +418,7 @@
    "seeds": [
     "更年期"
    ],
-   "prev": 7
+   "prev": 6
   },
   {
    "rank": 7,
@@ -428,7 +428,7 @@
    "seeds": [
     "発達障害"
    ],
-   "prev": 8
+   "prev": 7
   },
   {
    "rank": 8,
@@ -438,7 +438,7 @@
    "seeds": [
     "ペット"
    ],
-   "prev": 9
+   "prev": 8
   },
   {
    "rank": 9,
@@ -448,7 +448,7 @@
    "seeds": [
     "老後"
    ],
-   "prev": 49
+   "prev": 9
   },
   {
    "rank": 10,
@@ -458,7 +458,7 @@
    "seeds": [
     "腸活"
    ],
-   "prev": 11
+   "prev": 10
   },
   {
    "rank": 11,
@@ -468,7 +468,7 @@
    "seeds": [
     "投資"
    ],
-   "prev": 12
+   "prev": 11
   },
   {
    "rank": 12,
@@ -478,7 +478,7 @@
    "seeds": [
     "発達障害 AI"
    ],
-   "prev": null
+   "prev": 12
   },
   {
    "rank": 13,
@@ -488,7 +488,7 @@
    "seeds": [
     "ペット 看取り"
    ],
-   "prev": 14
+   "prev": 13
   },
   {
    "rank": 14,
@@ -498,7 +498,7 @@
    "seeds": [
     "更年期 漫画"
    ],
-   "prev": 15
+   "prev": 14
   },
   {
    "rank": 15,
@@ -508,7 +508,7 @@
    "seeds": [
     "発達障害 思春期"
    ],
-   "prev": null
+   "prev": 15
   },
   {
    "rank": 16,
@@ -518,7 +518,7 @@
    "seeds": [
     "スマホ脳"
    ],
-   "prev": 17
+   "prev": 16
   },
   {
    "rank": 17,
@@ -528,7 +528,7 @@
    "seeds": [
     "発達障害 女性"
    ],
-   "prev": 18
+   "prev": 17
   },
   {
    "rank": 18,
@@ -538,7 +538,7 @@
    "seeds": [
     "更年期 漢方"
    ],
-   "prev": null
+   "prev": 18
   },
   {
    "rank": 19,
@@ -548,7 +548,7 @@
    "seeds": [
     "発達障害 マンガ"
    ],
-   "prev": null
+   "prev": 19
   },
   {
    "rank": 20,
@@ -558,7 +558,7 @@
    "seeds": [
     "発達障害 グレーゾーン"
    ],
-   "prev": null
+   "prev": 20
   },
   {
    "rank": 21,
@@ -568,7 +568,7 @@
    "seeds": [
     "老後 一人"
    ],
-   "prev": 22
+   "prev": 21
   },
   {
    "rank": 22,
@@ -578,7 +578,7 @@
    "seeds": [
     "発達障害 仕事"
    ],
-   "prev": 1
+   "prev": 22
   },
   {
    "rank": 23,
@@ -588,7 +588,7 @@
    "seeds": [
     "睡眠改善"
    ],
-   "prev": null
+   "prev": 23
   },
   {
    "rank": 24,
@@ -618,7 +618,7 @@
    "seeds": [
     "子育て 本"
    ],
-   "prev": null
+   "prev": 26
   },
   {
    "rank": 27,
@@ -628,7 +628,7 @@
    "seeds": [
     "自律神経 整える"
    ],
-   "prev": null
+   "prev": 27
   },
   {
    "rank": 28,
@@ -658,7 +658,7 @@
    "seeds": [
     "腸活 本"
    ],
-   "prev": null
+   "prev": 30
   },
   {
    "rank": 31,
@@ -708,7 +708,7 @@
    "seeds": [
     "Kindle 本"
    ],
-   "prev": 43
+   "prev": 35
   },
   {
    "rank": 36,
@@ -738,7 +738,7 @@
    "seeds": [
     "発達障害"
    ],
-   "prev": 39
+   "prev": 38
   },
   {
    "rank": 39,
@@ -748,7 +748,7 @@
    "seeds": [
     "ペット"
    ],
-   "prev": null
+   "prev": 39
   },
   {
    "rank": 40,
@@ -758,7 +758,7 @@
    "seeds": [
     "老後"
    ],
-   "prev": 41
+   "prev": 40
   },
   {
    "rank": 41,
@@ -768,7 +768,7 @@
    "seeds": [
     "投資"
    ],
-   "prev": 42
+   "prev": 41
   },
   {
    "rank": 42,
@@ -778,7 +778,7 @@
    "seeds": [
     "Kindle 本"
    ],
-   "prev": 35
+   "prev": 42
   },
   {
    "rank": 43,
@@ -788,7 +788,7 @@
    "seeds": [
     "FIRE"
    ],
-   "prev": null
+   "prev": 43
   },
   {
    "rank": 44,
@@ -798,7 +798,7 @@
    "seeds": [
     "睡眠"
    ],
-   "prev": 45
+   "prev": 44
   },
   {
    "rank": 45,
@@ -808,7 +808,7 @@
    "seeds": [
     "更年期"
    ],
-   "prev": 38
+   "prev": 45
   },
   {
    "rank": 46,
@@ -818,7 +818,7 @@
    "seeds": [
     "発達障害"
    ],
-   "prev": null
+   "prev": 46
   },
   {
    "rank": 47,
@@ -828,7 +828,7 @@
    "seeds": [
     "ペット"
    ],
-   "prev": null
+   "prev": 47
   },
   {
    "rank": 48,
@@ -838,7 +838,7 @@
    "seeds": [
     "老後"
    ],
-   "prev": null
+   "prev": 48
   },
   {
    "rank": 49,
@@ -848,7 +848,7 @@
    "seeds": [
     "投資"
    ],
-   "prev": null
+   "prev": 49
   },
   {
    "rank": 50,
@@ -858,7 +858,7 @@
    "seeds": [
     "FIRE"
    ],
-   "prev": 44
+   "prev": 50
   }
  ]
 }
